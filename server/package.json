@@ -1,0 +1,32 @@
+{
+  "name": "modsec-log-server",
+  "version": "1.0.0",
+  "description": "ModSecurity v3 Audit Log Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "true"
+  },
+  "bin": {
+    "alamod": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rad-van/hackathon-2020.git"
+  },
+  "author": "Jiangbin Zhao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rad-van/hackathon-2020/issues"
+  },
+  "homepage": "https://github.com/rad-van/hackathon-2020#readme",
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.10.0",
+    "express": "^4.17.1",
+    "express-winston": "^4.0.5",
+    "express-ws": "^4.0.0",
+    "minimist": "^1.2.5",
+    "websocket-stream": "^5.5.2",
+    "winston": "^3.2.1",
+    "ws": "^7.4.0"
+  }
+}
