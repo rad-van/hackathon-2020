@@ -1,6 +1,6 @@
 # Hackthon 2020
 
-# Start the server
+# Start the backend server
 
 ## Create the server cert
 
@@ -28,3 +28,5 @@ npm link
 ```shell
 alamod
 ```
+
+The server outputs its log messages to console.
