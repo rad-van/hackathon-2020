@@ -1,0 +1,64 @@
+version: "3.8"
+
+networks:
+  hackathon:
+    driver: bridge
+
+volumes:
+  esdata:
+    driver: local
+
+services:
+  # The data storage
+  es:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.1'
+    container_name: es
+    networks:
+      - hackathon
+    ports:
+      - '9200:9200'
+    environment:
+      - node.name=es
+      - cluster.name=alamod-es
+      - cluster.initial_master_nodes=es
+      # NOTE: The -Xms and -Xmx values must be same for ES
+      - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  # The modsec/nginx firewall
+  waf:
+    # TODO: replace image with nginx+modsec
+    image: 'nginx:1.19'
+    container_name: waf
+    networks:
+      - hackathon
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+
+  # Our backend server
+  be:
+    image: "dregis.strangeloop.net/hackathon-2020/server:${ALAMOD_VERSION:-0.1}"
+    container_name: be
+    networks:
+      - hackathon
+    ports:
+      - '${ALAMOD_PORT:-4430}:4430'
+    working_dir: "/app"
+    volumes:
+      - "./server/key.pem:/app/key.pem"
+      - "./server/cert.pem:/app/cert.pem"
+    command: ["node", "./index.js"]
+    environment:
+      ES_HOSTNAME: es
+      ES_PORT: 9200
+      ES_CLUSTER: alamod-es
+    depends_on:
+      - es
+      - waf
+
