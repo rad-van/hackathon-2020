@@ -37,7 +37,7 @@ which the server will bind:
 
 ```shell
 cd server
-./sslcert $BIND_ADDR
+./sslcert.sh $BIND_ADDR
 ```
 
 The command creates cert.pem and key.pem in the current directory.
@@ -73,3 +73,5 @@ alamod
 ```
 
 The server outputs its log messages to console.
+
+Run `alamod -h` for command line options.
