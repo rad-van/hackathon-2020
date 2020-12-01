@@ -53,6 +53,12 @@ ALAMOD_VERSION=0.1
 
 Update the version number accordingly.
 
+Change the host's kernel setting for Elastic Search:
+
+```shell
+sudo sysctl -w vm.max_map_count=262144
+```
+
 And run `docker-compose up -d`.
 
 ## Run the server natively
