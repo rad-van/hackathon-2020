@@ -4,3 +4,8 @@ RUN apt-get update && \
     apt-get install -y tcpdump less net-tools \
       dnsutils netcat-openbsd telnet
 
+WORKDIR /app
+
+COPY *.json /app/
+
+RUN npm install --prod

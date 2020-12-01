@@ -2,10 +2,6 @@ FROM dregis.strangeloop.net/hackathon-2020/server-dep:1
 
 WORKDIR /app
 
-COPY *.json /app/
-
-RUN npm install --prod
-
 COPY *.js /app/
 
 ARG HTTPS_PORT

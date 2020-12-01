@@ -2,7 +2,7 @@
 
 set -e
 
-TAG=${1:?Image tag missing}
+TAG=${1:-0.1}
 
 REPO="dregis.strangeloop.net/hackathon-2020"
 
