@@ -30,18 +30,6 @@ It creates a docker image with the following repo:
 
 # Start the backend server
 
-## Create the server cert
-
-Run the script sslcert.sh in `server/`, provide the IP address to
-which the server will bind:
-
-```shell
-cd server
-./sslcert.sh $BIND_ADDR
-```
-
-The command creates cert.pem and key.pem in the current directory.
-
 ## Run the server in a docker-compose mesh
 
 In the git top directory, create an `./env` file with the following

@@ -9,9 +9,7 @@ INF(`Node version: ${process.version}`);
 const args = parseArgs(process.argv.slice(2),
                        {
                          default: {
-                           key: "key.pem",
-                           cert: "cert.pem",
-                           port: 4430,
+                           port: 80,
                            addr: "0.0.0.0"
                          },
                          alias: {
@@ -21,18 +19,16 @@ const args = parseArgs(process.argv.slice(2),
                        });
 
 const server_options = {
-  https_port: process.env.HTTPS_PORT || args.port,
-  bind_addr: process.env.BIND_ADDR || args.addr,
-  key_file: process.env.KEY_FILE || args.key,
-  cert_file: process.env.CERT_FILE || args.cert
+  server_port: process.env.SERVER_PORT || args.port,
+  bind_addr: process.env.BIND_ADDR || args.addr
 };
 
-INF(`Starting WAF a la Mod HTTPS server on ${server_options.bind_addr}:${server_options.https_port}`);
+INF(`Starting WAF a la Mod HTTPS server on ${server_options.bind_addr}:${server_options.server_port}`);
 
 const express = require('express');
 const express_winston = require('express-winston');
 
-const https = require('https');
+const http = require('http');
 const fs = require('fs');
 
 const app = express();
@@ -46,7 +42,7 @@ app.use(express_winston.logger({
 
 let server_count = 1;
 
-let https_server;
+let http_server;
 const server_closed = (what) => {
   return () => {
     INF(`${what} closed`);
@@ -59,38 +55,32 @@ const server_closed = (what) => {
 };
 
 const https_startup = () => {
-  https_server = https.createServer(
-    {
-      key: fs.readFileSync(server_options.key_file),
-      cert: fs.readFileSync(server_options.cert_file)
-    },
-    app
-  );
+  http_server = http.createServer(app);
 
-  https_server.on('close', server_closed('HTTPS server'));
-  https_server.listen(
-    server_options.https_port, server_options.bind_addr,
+  http_server.on('close', server_closed('HTTP server'));
+  http_server.listen(
+    server_options.server_port, server_options.bind_addr,
     () => {
-      const addr = https_server.address();
-      INF(`HTTPS server listening on: ${addr.address}:${addr.port}`);
+      const addr = http_server.address();
+      INF(`HTTP server listening on: ${addr.address}:${addr.port}`);
       server_count += 1;
     }
   );
 };
 
 const shutdown = () => {
-  https_server.close(() => {
+  http_server.close(() => {
     // FIXME: This message is only showing up in the console, not in
     // the log file.
-    INF('HTTPS server shut down');
+    INF('HTTP server shut down');
   });
 
   // This appears to be a hack to shut down an HTTP server quickly.  See
   // https://apple.stackexchange.com/questions/117644/how-can-i-list-my-open-network-ports-with-netstat
-  setImmediate(() => https_server.emit('close'));
+  setImmediate(() => http_server.emit('close'));
 
   setTimeout(() => {
-    ERR('Unable to close HTTPS connections in time, forcefully exiting...');
+    ERR('Unable to close HTTP connections in time, forcefully exiting...');
     process.exit(1);
   }, 3500);
 };

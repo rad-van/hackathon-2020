@@ -51,11 +51,8 @@ services:
     networks:
       - hackathon
     ports:
-      - '${ALAMOD_PORT:-4430}:4430'
+      - '${ALAMOD_PORT:-8000}:80'
     working_dir: "/app"
-    volumes:
-      - "./server/key.pem:/app/key.pem"
-      - "./server/cert.pem:/app/cert.pem"
     command: ["node", "./index.js"]
     environment:
       ES_HOSTNAME: es
