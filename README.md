@@ -4,6 +4,8 @@
 
 ## Build the base image
 
+Update the image tags in `server/image_tags.txt` as necessary.
+
 Run the build-dep.sh script in `server/`:
 
 ```shell
@@ -11,22 +13,20 @@ cd server
 ./build-dep.sh
 ```
 
-This creates a docker image with the following repo/tag:
-"dregis.strangeloop.net/hackathon-2020/server-dep:1"
+This creates a docker image with the following repo:
+"dregis.strangeloop.net/hackathon-2020/server-dep"
 
 ## Build the server image
 
-Run the build.sh script in `server/`, provide the image tag:
+Run the build.sh script in `server/`:
 
 ```shell
 cd server
-./build.sh 0.1
+./build.sh
 ```
 
-It creates a docker image with the following repo/tag:
-"dregis.strangeloop.net/hackathon-2020/server:0.1".
-
-Update the image tag accordingly.
+It creates a docker image with the following repo:
+"dregis.strangeloop.net/hackathon-2020/server".
 
 # Start the backend server
 
