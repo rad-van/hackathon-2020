@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e
+. ./image_tags.txt
 
-TAG=${1:-0.1}
+TAG=${1:-${ALAMOD_TAG}}
 
 REPO="dregis.strangeloop.net/hackathon-2020"
 

@@ -1,4 +1,4 @@
-FROM dregis.strangeloop.net/hackathon-2020/server-dep:1
+FROM dregis.strangeloop.net/hackathon-2020/server-dep:2
 
 WORKDIR /app
 
