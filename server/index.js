@@ -10,7 +10,9 @@ const args = parseArgs(process.argv.slice(2),
                        {
                          default: {
                            port: 80,
-                           addr: "0.0.0.0"
+                           addr: "0.0.0.0",
+                           es_host: "es",
+                           es_port: 9200
                          },
                          alias: {
                            a: 'addr',
@@ -20,13 +22,16 @@ const args = parseArgs(process.argv.slice(2),
 
 const server_options = {
   server_port: process.env.SERVER_PORT || args.port,
-  bind_addr: process.env.BIND_ADDR || args.addr
+  bind_addr: process.env.BIND_ADDR || args.addr,
+  es_host: process.env.ES_HOSTNAME || args.es_host,
+  es_port: process.env.ES_PORT || args.es_port
 };
 
 INF(`Starting WAF a la Mod HTTP server on ${server_options.bind_addr}:${server_options.server_port}`);
 
 const express = require('express');
 const express_winston = require('express-winston');
+const es = require('@elastic/elasticsearch');
 
 const http = require('http');
 const fs = require('fs');
@@ -40,9 +45,14 @@ app.use(express_winston.logger({
   meta: false,
 }));
 
+const esc = (() => {
+  const {es_host, es_port} = server_options;
+  return new es.Client({node: `http://${es_host}:${es_port}`});
+})();
+
 app.use(express.json());
 
-app.post("/ingest", (req, res, next) => {
+app.post("/ingest", async (req, res, next) => {
   const {transaction} = req.body;
   if (transaction !== undefined) {
     DEB(transaction);
@@ -50,7 +60,26 @@ app.post("/ingest", (req, res, next) => {
       INF('=== blocked request on [', transaction.request.uri, ']');
     }
   }
-  // TODO: send transaction into ES
+  // TODO: name the index by the protected host name?
+  await esc.index({
+    index: 'all_logs',
+    refresh: true,
+    body: transaction
+  });
+  // TODO: send transaction over websocket
+  next();
+});
+
+app.post("/history", async (req, res, next) => {
+  const {query} = req.body;
+  const {body} = await esc.search({
+    index: 'all_logs',
+    body: {
+      query
+    }
+  });
+  DEB("total hits:", body.hits.total.value);
+  res.json(body.hits);
   next();
 });
 
