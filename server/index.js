@@ -23,7 +23,7 @@ const server_options = {
   bind_addr: process.env.BIND_ADDR || args.addr
 };
 
-INF(`Starting WAF a la Mod HTTPS server on ${server_options.bind_addr}:${server_options.server_port}`);
+INF(`Starting WAF a la Mod HTTP server on ${server_options.bind_addr}:${server_options.server_port}`);
 
 const express = require('express');
 const express_winston = require('express-winston');
@@ -39,6 +39,20 @@ app.use(express_winston.logger({
   msg: '{{res.statusCode}} - {{req.secure === true ? \'https\' : \'http\'}} {{req.method}} on {{req.url}} by {{req.headers[\'x-forwarded-for\'] || req.connection.remoteAddress}}',
   meta: false,
 }));
+
+app.use(express.json());
+
+app.post("/ingest", (req, res, next) => {
+  const {transaction} = req.body;
+  if (transaction !== undefined) {
+    DEB(transaction);
+    if (transaction.messages.length !== 0) {
+      INF('=== blocked request on [', transaction.request.uri, ']');
+    }
+  }
+  // TODO: send transaction into ES
+  next();
+});
 
 let server_count = 1;
 
