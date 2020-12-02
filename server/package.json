@@ -26,6 +26,7 @@
     "express-winston": "^4.0.5",
     "express-ws": "^4.0.0",
     "minimist": "^1.2.5",
+    "socket.io": "^3.0.3",
     "websocket-stream": "^5.5.2",
     "winston": "^3.2.1",
     "ws": "^7.4.0"
