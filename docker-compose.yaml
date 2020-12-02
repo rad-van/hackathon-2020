@@ -35,14 +35,13 @@ services:
 
   # The modsec/nginx firewall
   waf:
-    # TODO: replace image with nginx+modsec
-    image: 'nginx:1.19'
+    image: 'dregis.strangeloop.net/hackathon-2020/wafmod:1.0.0'
     container_name: waf
     networks:
       - hackathon
     ports:
-      - "8443:8443"
-      - "8080:8080"
+      - "8443:443"
+      - "8080:80"
 
   # Our backend server
   be:
