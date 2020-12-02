@@ -101,7 +101,6 @@ RUN set -x && \
   mv -v v${CRS_VERSION}.tar.gz coreruleset-${CRS_VERSION}.tar.gz && \
   gpg --verify coreruleset-${CRS_VERSION}.tar.gz.asc && \
   tar xf coreruleset-${CRS_VERSION}.tar.gz && \
-  mv coreruleset-${CRS_VERSION}/crs-setup.conf.example coreruleset-${CRS_VERSION}/crs-setup.conf && \
 
   # Compile the dynamic nginx module for modsec connector
   cd /tmp/nginx-${NGINX_VERSION} && \
@@ -143,7 +142,8 @@ COPY --from=builder-modsec /tmp/modsecurity-${MODSEC_VERSION}/unicode.mapping /e
 COPY --from=builder-nginx /tmp/nginx-${NGINX_VERSION}/objs/ngx_http_modsecurity_module.so /etc/nginx/modules/
 
 # Copy the OWASP CRS
-COPY --from=builder-nginx /tmp/coreruleset-${CRS_VERSION}/ /etc/nginx/modsecurity/owasp-crs/
+COPY --from=builder-nginx /tmp/coreruleset-${CRS_VERSION}/crs-setup.conf.example /etc/nginx/modsecurity/owasp-crs/crs-setup.conf
+COPY --from=builder-nginx /tmp/coreruleset-${CRS_VERSION}/rules/ /etc/nginx/modsecurity/owasp-crs/rules/
 
 # Copy the self signed certificates
 COPY --from=builder-nginx /tmp/certs/* /etc/nginx/certs/
