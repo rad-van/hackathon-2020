@@ -54,10 +54,13 @@ const server_closed = (what) => {
   };
 };
 
+let io;
+
 const https_startup = () => {
   http_server = http.createServer(app);
 
   http_server.on('close', server_closed('HTTP server'));
+  io = require('socket.io')(http_server);
   http_server.listen(
     server_options.server_port, server_options.bind_addr,
     () => {
@@ -89,3 +92,16 @@ process.on('SIGTERM', shutdown);
 process.on('SIGINT', shutdown);
 
 https_startup();
+
+
+io.on('connection', socket => {
+    console.log('connect');
+});
+
+app.get('/', function(req, res) {
+    res.send('redirect to dashboard')
+});
+
+app.post('/ingestion', function(req, res) {
+    res.send('parse/store to es')
+});
