@@ -28,9 +28,7 @@ cd server
 It creates a docker image with the following repo:
 "dregis.strangeloop.net/hackathon-2020/server".
 
-# Start the backend server
-
-## Run the server in a docker-compose mesh
+# Start the mesh
 
 Change the host's kernel setting for Elastic Search:
 
@@ -40,23 +38,13 @@ sudo sysctl -w vm.max_map_count=262144
 
 And run `docker-compose up -d` in the git top directory.
 
-## Run the server natively
+The firewall listens on port 8443 and 8000.  Open a browser tab and
+type "http://$HOST_NAME:8000" in the address bar to load the
+"HacmeBank" test web app.
 
-### Install the server
+NOTE: Using numeric host IP as host name in requests trigger a warning
+in audit logs.  Use a DNS name to reduce the noise.
 
-In `server/`, run `npm link` to install the "alamod" command in PATH:
-
-```shell
-cd server
-npm link
-```
-
-### Start the server
-
-```shell
-alamod
-```
-
-The server outputs its log messages to console.
-
-Run `alamod -h` for command line options.
+Change logging level of the backend server with the `ALAMOD_LOG` env
+variable.  Accepted values are "info", "debug" and "error", "debug"
+being default.
