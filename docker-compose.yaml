@@ -57,6 +57,7 @@ services:
       ES_HOSTNAME: es
       ES_PORT: 9200
       ES_CLUSTER: alamod-es
+      DEBUG_LOGGING_LEVEL: '${ALAMOD_LOG:-info}'
     depends_on:
       - es
 
