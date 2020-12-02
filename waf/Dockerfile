@@ -19,6 +19,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   autoconf \
   automake \
   build-essential \
+  git \
   libcurl4-openssl-dev \
   libgeoip-dev \
   liblmdb-dev \
@@ -41,12 +42,16 @@ RUN set -x && \
   cd .. && \
 
   # Download ModSecurity sources
-  wget -q https://github.com/SpiderLabs/ModSecurity/releases/download/${MODSEC_VERSION}/modsecurity-${MODSEC_VERSION}.tar.gz && \
-  tar xf modsecurity-${MODSEC_VERSION}.tar.gz && \
+#  wget -q https://github.com/SpiderLabs/ModSecurity/releases/download/${MODSEC_VERSION}/modsecurity-${MODSEC_VERSION}.tar.gz && \
+#  tar xf modsecurity-${MODSEC_VERSION}.tar.gz && \
+  git clone https://github.com/SpiderLabs/ModSecurity --branch v3.0.4 --depth 1 && \
 
   # Build ModSecurity
-  cd modsecurity-${MODSEC_VERSION} && \
+#  cd modsecurity-${MODSEC_VERSION} && \
+  cd ModSecurity && \
   ./build.sh && \
+  git submodule init && \
+  git submodule update && \
   ./configure && \
   make && \
   make install
@@ -136,7 +141,8 @@ RUN rm -rf /etc/nginx/conf.d/*
 # Copy binaries for modsecurity
 COPY --from=builder-modsec /usr/local/modsecurity/ /usr/local/modsecurity/
 COPY --from=builder-modsec /usr/local/lib/ /usr/local/lib/
-COPY --from=builder-modsec /tmp/modsecurity-${MODSEC_VERSION}/unicode.mapping /etc/nginx/modsecurity/
+#COPY --from=builder-modsec /tmp/modsecurity-${MODSEC_VERSION}/unicode.mapping /etc/nginx/modsecurity/
+COPY --from=builder-modsec /tmp/ModSecurity/unicode.mapping /etc/nginx/modsecurity/
 
 # Copy the nginx module
 COPY --from=builder-nginx /tmp/nginx-${NGINX_VERSION}/objs/ngx_http_modsecurity_module.so /etc/nginx/modules/

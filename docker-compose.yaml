@@ -35,7 +35,7 @@ services:
 
   # The modsec/nginx firewall
   waf:
-    image: 'dregis.strangeloop.net/hackathon-2020/wafmod:1.0.1'
+    image: 'dregis.strangeloop.net/hackathon-2020/wafmod:2.0.0'
     container_name: waf
     networks:
       - hackathon
