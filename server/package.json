@@ -4,7 +4,8 @@
   "description": "ModSecurity v3 Audit Log Server",
   "main": "index.js",
   "scripts": {
-    "test": "true"
+    "test": "true",
+    "start": "node ./index.js"
   },
   "bin": {
     "alamod": "./index.js"

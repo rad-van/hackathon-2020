@@ -1,12 +1,22 @@
-FROM dregis.strangeloop.net/hackathon-2020/server-dep:2
+FROM node:12.20.0 AS base
+
+RUN apt-get update && \
+    apt-get install -y tcpdump less net-tools \
+      dnsutils netcat-openbsd telnet
 
 WORKDIR /app
+COPY *.json ./
 
-COPY *.js /app/
+FROM base AS deps
 
-ARG HTTPS_PORT
+RUN npm install --prod
+
+FROM base AS release
+
+COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+ARG SERVER_PORT
 ARG BIND_ARRD
-ARG KEY_FILE
-ARG CERT_FILE
 
-CMD ["node", "./index.js"]
+EXPOSE ${SERVER_PORT}
+CMD ["npm", "run", "start"]
