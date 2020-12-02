@@ -32,22 +32,13 @@ It creates a docker image with the following repo:
 
 ## Run the server in a docker-compose mesh
 
-In the git top directory, create an `./env` file with the following
-content:
-
-```
-ALAMOD_VERSION=0.1
-```
-
-Update the version number accordingly.
-
 Change the host's kernel setting for Elastic Search:
 
 ```shell
 sudo sysctl -w vm.max_map_count=262144
 ```
 
-And run `docker-compose up -d`.
+And run `docker-compose up -d` in the git top directory.
 
 ## Run the server natively
 
