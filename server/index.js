@@ -38,6 +38,8 @@ const fs = require('fs');
 
 const app = express();
 
+let io;
+
 app.use(express_winston.logger({
   level: 'info',
   winstonInstance: logger,
@@ -54,26 +56,48 @@ app.use(express.json());
 
 app.post("/ingest", async (req, res, next) => {
   const {transaction} = req.body;
+
+    let transactions = [];
+    let esTransaction = {};
+
   if (transaction !== undefined) {
     DEB(transaction);
-    if (transaction.messages.length !== 0) {
-      INF('=== blocked request on [', transaction.request.uri, ']');
+    esTransaction.client_ip = transaction.client_ip;
+
+    esTransaction.time_stamp = Date.parse(transaction.time_stamp);
+    esTransaction.client_port = transaction.client_port;
+    esTransaction.host_ip =  transaction.host_ip;
+    esTransaction.host_port =  transaction.host_port;
+    esTransaction.unique_id =  transaction.unique_id;
+    esTransaction.request =  transaction.request;
+
+    const {http_code, headers} =  transaction.response;
+    esTransaction.response = {http_code, headers};
+    if (http_code && http_code > 399 && transaction.messages.length !== 0) {
+        INF('=== blocked request on [', transaction.request.uri, ']');
+        transaction.messages.forEach((message) => {
+            esTransaction.message = message;
+            esTransaction.allowed = false;
+            transactions.push({...esTransaction});
+            io.emit("auditLog", {...esTransaction});
+            }
+        );
+    }
+    else{
+        esTransaction.allowed = true;
+        io.emit("auditLog", {...esTransaction});
+        transactions.push({...esTransaction});
     }
   }
-  // TODO: name the index by the protected host name?
-  await esc.index({
-    index: 'all_logs',
-    refresh: true,
-    body: transaction
-  });
-  // TODO: send transaction over websocket
-  next();
+  const body = transactions.flatMap(doc => [{index: {_index: 'audit-log'}}, doc]);
+  await esc.bulk({refresh: true, body});
+  res.sendStatus(200);
 });
 
 app.post("/history", async (req, res, next) => {
   const {query} = req.body;
   const {body} = await esc.search({
-    index: 'all_logs',
+    index: 'audit-log',
     body: {
       query
     }
@@ -81,6 +105,10 @@ app.post("/history", async (req, res, next) => {
   DEB("total hits:", body.hits.total.value);
   res.json(body.hits);
   next();
+});
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + "/test.html");
 });
 
 let server_count = 1;
@@ -96,8 +124,6 @@ const server_closed = (what) => {
     }
   };
 };
-
-let io;
 
 const https_startup = () => {
   http_server = http.createServer(app);
@@ -139,12 +165,4 @@ https_startup();
 
 io.on('connection', socket => {
     console.log('connect');
-});
-
-app.get('/', function(req, res) {
-    res.send('redirect to dashboard')
-});
-
-app.post('/ingestion', function(req, res) {
-    res.send('parse/store to es')
 });
