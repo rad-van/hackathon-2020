@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const parseArgs = require('minimist');
+const cors = require('cors');
 
 const {INF, ERR, DEB, logger} = require('./log.js');
 
@@ -39,6 +40,8 @@ const fs = require('fs');
 const app = express();
 
 let io;
+
+app.use(cors());
 
 app.use(express_winston.logger({
   level: 'info',
@@ -129,7 +132,11 @@ const https_startup = () => {
   http_server = http.createServer(app);
 
   http_server.on('close', server_closed('HTTP server'));
-  io = require('socket.io')(http_server);
+  io = require('socket.io')(http_server, {
+    cors: {
+      origin: '*',
+    },
+  });
   http_server.listen(
     server_options.server_port, server_options.bind_addr,
     () => {
