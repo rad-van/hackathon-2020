@@ -65,38 +65,7 @@ app.post("/ingest", async (req, res, next) => {
 
   if (transaction !== undefined) {
     DEB(transaction);
-    esTransaction.client_ip = transaction.client_ip;
-
-    esTransaction.time_stamp = Date.parse(transaction.time_stamp);
-    esTransaction.client_port = transaction.client_port;
-    esTransaction.host_ip =  transaction.host_ip;
-    esTransaction.host_port =  transaction.host_port;
-    esTransaction.unique_id =  transaction.unique_id;
-    esTransaction.request =  transaction.request;
-
-    const {http_code, headers} =  transaction.response;
-    esTransaction.response = {http_code, headers};
-    if (http_code && http_code > 399 && transaction.messages.length !== 0) {
-        INF('=== blocked request on [', transaction.request.uri, ']');
-        transaction.messages.forEach((message) => {
-            esTransaction.message = message;
-            esTransaction.allowed = false;
-            if(message.details.ruleId === "10") {
-                message.details.tags.filter(t => t.includes("||")).forEach((tag) => {
-                    const geoInfo = tag.split('||');
-                    esTransaction.request[geoInfo[0]] = geoInfo[1];
-                })
-            }
-            transactions.push({...esTransaction});
-            io.emit("auditLog", {...esTransaction});
-          }
-        );
-    }
-    else{
-        esTransaction.allowed = true;
-        io.emit("auditLog", {...esTransaction});
-        transactions.push({...esTransaction});
-    }
+    buildTransactions(transaction, transactions);
   }
   const body = transactions.flatMap(doc => [{index: {_index: 'audit-log'}}, doc]);
   await esc.bulk({refresh: true, body});
@@ -171,6 +140,47 @@ process.on('SIGINT', shutdown);
 
 https_startup();
 
+
+const buildTransactions = (transaction, transactions) => {
+    let esTransaction = {};
+    const {http_code, headers} =  transaction.response;
+
+    esTransaction.client_ip = transaction.client_ip;
+
+    esTransaction.time_stamp = Date.parse(transaction.time_stamp);
+    esTransaction.client_port = transaction.client_port;
+    esTransaction.host_ip =  transaction.host_ip;
+    esTransaction.host_port =  transaction.host_port;
+    esTransaction.unique_id =  transaction.unique_id;
+    esTransaction.request =  transaction.request;
+    esTransaction.response = {http_code, headers};
+
+    if (http_code && http_code > 399 && transaction.messages.length !== 0) {
+        INF('=== blocked request on [', transaction.request.uri, ']');
+        transaction.messages.forEach((message) => {
+                esTransaction.message = message;
+                esTransaction.allowed = false;
+                if(message.details.ruleId === "10") {
+                    message.details.tags.filter(t => t.includes("||")).forEach((tag) => {
+                        const geoInfo = tag.split('||');
+                        esTransaction.request[geoInfo[0]] = geoInfo[1];
+                    })
+                }
+                transactions.push({...esTransaction});
+                sendWsMessage("auditLog", {...esTransaction});
+            }
+        );
+    }
+    else{
+        esTransaction.allowed = true;
+        sendWsMessage("auditLog", {...esTransaction});
+        transactions.push({...esTransaction});
+    }
+};
+
+const sendWsMessage = (eventName, body) => {
+    io.emit(eventName, body);
+};
 
 io.on('connection', socket => {
     console.log('connect');
