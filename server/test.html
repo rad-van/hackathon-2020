@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+<script>
+    const socket = io('http://localhost:8088');
+    socket.on('auditLog', console.error.bind(console));
+</script>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+
+</body>
+</html>

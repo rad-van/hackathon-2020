@@ -81,9 +81,15 @@ app.post("/ingest", async (req, res, next) => {
         transaction.messages.forEach((message) => {
             esTransaction.message = message;
             esTransaction.allowed = false;
+            if(message.details.ruleId === "10") {
+                message.details.tags.filter(t => t.includes("||")).forEach((tag) => {
+                    const geoInfo = tag.split('||');
+                    esTransaction.request[geoInfo[0]] = geoInfo[1];
+                })
+            }
             transactions.push({...esTransaction});
             io.emit("auditLog", {...esTransaction});
-            }
+          }
         );
     }
     else{
@@ -108,10 +114,6 @@ app.post("/history", async (req, res, next) => {
   DEB("total hits:", body.hits.total.value);
   res.json(body.hits);
   next();
-});
-
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + "/test.html");
 });
 
 let server_count = 1;
