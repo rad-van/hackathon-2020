@@ -24,10 +24,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libgeoip-dev \
   liblmdb-dev \
   liblua5.3-dev \
+  libmaxminddb-dev \
   libpcre++-dev \
   libtool \
   libxml2-dev \
   libyajl-dev \
+  mmdb-bin \
   wget
 
 WORKDIR /tmp
@@ -78,6 +80,7 @@ RUN apt-get update && apt-get install -y \
   libpcre++-dev \
   libtool \
   libyajl-dev \
+  mmdb-bin \
   wget \
   zlib1g-dev
 
@@ -113,8 +116,15 @@ RUN set -x && \
   make modules && \
 
   # Generate self-signed certificates
-  cd ../certs && \
-  openssl req -x509 -days 365 -new -config ./openssl.conf -keyout ./server.key -out ./server.crt
+  cd /tmp/certs && \
+  openssl req -x509 -days 365 -new -config ./openssl.conf -keyout ./server.key -out ./server.crt && \
+  cd /tmp && \
+
+  # Download GeoLite2 City database
+  wget -q -O GeoLite2-City.tar.gz "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=GUCsUymX8ETdhDBG&suffix=tar.gz" && \
+  tar xf GeoLite2-City.tar.gz && \
+  rm -f GeoLite2-City.tar.gz && \
+  mv GeoLite2-City_* GeoLite2-City
 
 
 # *******************************************************************
@@ -134,6 +144,7 @@ RUN apt-get update && apt-get install -y \
   libgeoip1 \
   liblmdb0 \
   liblua5.3-0 \
+  libmaxminddb0 \
   libyajl2
 
 RUN rm -rf /etc/nginx/conf.d/*
@@ -153,6 +164,9 @@ COPY --from=builder-nginx /tmp/coreruleset-${CRS_VERSION}/rules/ /etc/nginx/mods
 
 # Copy the self signed certificates
 COPY --from=builder-nginx /tmp/certs/* /etc/nginx/certs/
+
+# Copy the GeoLite City DB
+COPY --from=builder-nginx /tmp/GeoLite2-City/GeoLite2-City.mmdb /etc/nginx/modsecurity/
 
 COPY nginx/nginx.conf nginx/mime.types /etc/nginx/
 COPY nginx/conf.d/* /etc/nginx/conf.d/
