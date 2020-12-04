@@ -42,8 +42,6 @@ services:
     ports:
       - "8443:443"
       - "8000:80"
-    depends_on:
-      - be
 
   # Our backend server
   be:
