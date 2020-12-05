@@ -2,6 +2,7 @@
 
 const parseArgs = require('minimist');
 const cors = require('cors');
+const esResponseParser = require("es-response-parser");
 
 const {INF, ERR, DEB, logger} = require('./log.js');
 
@@ -182,35 +183,76 @@ const buildTransactions = (transaction, transactions) => {
 
 const parseData = (response, labels, aggregation, type, colors) => {
 
-    switch(type) {
-        case "bar":
-            const chartData = {
-                labels: labels,
-                datasets: []
-            };
-            const data = [];
-            if(aggregation){
-
-                labels.forEach((label) => {
-                   data.push(response.aggregations[label].count.value);
+    if(aggregation)
+    {
+        console.log(response);
+        const parsedResponse = esResponseParser.parse(response);
+        let chartData = {
+            labels: [],
+            datasets: []
+        };
+        let data = [];
+        switch(type) {
+            case "doughnut":
+            case "horizontal-bar":
+                parsedResponse.forEach((r) => {
+                    chartData.labels.push(r.aggName);
+                    data.push(r.count);
                 });
-            }
-            const datasets = [
-                {
-                    label: 'Count',
-                    backgroundColor: colors,
-                    borderColor: colors,
-                    borderWidth: 1,
-                    hoverBackgroundColor: colors,
-                    hoverBorderColor: colors,
-                    data: data
+                chartData.datasets = [
+                    {
+                        label: 'Count',
+                        backgroundColor: '#ecb3ff',
+                        hoverBackgroundColor: '#99bbff',
+                        borderColor: '#99ff66',
+                        data: data
+                    }
+                ];
+                return chartData;
+            case "time":
+                parsedResponse.forEach((r) => {
+                    chartData.labels.push(r.aggName);
+                    data.push(r.count);
+                });
+                chartData.datasets = [
+                    {
+                        label: 'Rules',
+                        backgroundColor: '#ecb3ff',
+                        hoverBackgroundColor: '#99bbff',
+                        borderColor: '#99ff66',
+                        fill: false,
+                        data: data
+                    }
+                ];
+                return chartData;
+            case "bar":
+
+                chartData = {
+                    labels: labels,
+                    datasets: []
+                };
+                data = [];
+                if(aggregation){
+
+                    labels.forEach((label) => {
+                        data.push(response.aggregations[label].count.value);
+                    });
                 }
-            ];
-            chartData.datasets = datasets;
-            return chartData;
+                chartData.datasets = [
+                    {
+                        label: 'Count',
+                        backgroundColor: '#ecb3ff',
+                        hoverBackgroundColor: '#99bbff',
+                        borderColor: '#99ff66',
+                        data: data
+                    }
+                ];
+                return chartData;
+        }
     }
-    return [];
-}
+
+    return response;
+};
 
 const sendWsMessage = (eventName, body) => {
     io.emit(eventName, body);

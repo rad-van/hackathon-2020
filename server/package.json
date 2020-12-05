@@ -23,6 +23,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.10.0",
     "cors": "^2.8.5",
+    "es-response-parser": "^1.0.2",
     "express": "^4.17.1",
     "express-winston": "^4.0.5",
     "express-ws": "^4.0.0",
