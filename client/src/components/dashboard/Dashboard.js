@@ -43,8 +43,10 @@ const Dashboard = (props) => {
     <div>Hello Dashboard
       <div><HorizontalBar
           data={props.charts.blockedAllowed.data}
+          height={100}
+          width={100}
           options={{
-            maintainAspectRatio: true
+            maintainAspectRatio: false
           }}
       /></div>
     </div>
