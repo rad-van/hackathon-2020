@@ -6,7 +6,7 @@ import Configuration from 'components/configuration/Configuration';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
 import { UIContext, UIContextProvider } from 'contexts/ui-context';
-import { ReactComponent as FireWaf } from 'firewaf.svg';
+import { ReactComponent as FireWafLogo } from 'firewaf.svg';
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
@@ -35,7 +35,7 @@ const App: React.FunctionComponent = () => {
           <Layout style={{ minHeight: '100vh' }}>
             <Sider className="menu-sider" width={300}>
               <div className="firewaf-title">
-                <FireWaf />
+                <FireWafLogo />
                 <h1>Radware FireWAF</h1>
               </div>
 

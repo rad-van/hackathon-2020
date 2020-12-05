@@ -1,7 +1,7 @@
 import { TUIContext, UIContext } from 'contexts/ui-context';
 import React, { useContext, useEffect } from 'react';
 
-function Dashboard() {
+const Dashboard: React.FunctionComponent = () => {
   const uiContext = useContext<TUIContext>(UIContext);
 
   useEffect(() => {

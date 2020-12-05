@@ -1,7 +1,7 @@
 import { TUIContext, UIContext } from 'contexts/ui-context';
 import React, { useContext, useEffect } from 'react';
 
-function Audit() {
+const Audit: React.FunctionComponent = () => {
   const uiContext = useContext<TUIContext>(UIContext);
 
   useEffect(() => {
