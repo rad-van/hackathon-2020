@@ -1,5 +1,5 @@
-import { init, RematchDispatch, RematchRootState } from '@rematch/core';
-import { realTime } from 'store/real-time';
+import { init, RematchDispatch } from '@rematch/core';
+import { realTime, RealTimeState } from 'store/real-time';
 
 export interface RootModel {
   realTime: typeof realTime
@@ -15,4 +15,7 @@ export const store = init({
 
 export type Store = typeof store;
 export type Dispatch = RematchDispatch<RootModel>;
-export type RootState = RematchRootState<RootModel>;
+
+export interface RootState {
+  realTime: RealTimeState
+}

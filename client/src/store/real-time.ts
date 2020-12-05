@@ -1,8 +1,9 @@
 import { createModel } from '@rematch/core';
 import { RootModel } from 'store';
+import { AuditDocument } from 'store/types/audit-document';
 
 export interface RealTimeState {
-  requests: any[]
+  requests: AuditDocument[]
 }
 
 export const realTime = createModel<RootModel>({
@@ -10,13 +11,11 @@ export const realTime = createModel<RootModel>({
     requests: [],
   } as RealTimeState,
   reducers: {
-    // handle state changes with pure functions
-    addRequest(state: RealTimeState, payload: any): RealTimeState {
-      const newState = {
+    addRequest(state: RealTimeState, payload: AuditDocument): RealTimeState {
+      return {
         ...state,
         requests: [...state.requests, payload],
       };
-      return newState;
     },
   },
 });
