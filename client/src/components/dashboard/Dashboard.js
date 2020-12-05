@@ -46,7 +46,10 @@ const Dashboard = (props) => {
           height={100}
           width={100}
           options={{
-            maintainAspectRatio: false
+          legend: {
+              display: false,
+          },
+          maintainAspectRatio: false
           }}
       /></div>
     </div>
