@@ -42,6 +42,8 @@ const app = express();
 let io;
 
 app.use(cors());
+app.use(express.json());
+
 
 app.use(express_winston.logger({
   level: 'info',
@@ -76,12 +78,12 @@ app.post("/history", async (req, res, next) => {
   const {query} = req.body;
   const {body} = await esc.search({
     index: 'audit-log',
-    body: {
-      query
-    }
+    body: req.body.query
   });
   DEB("total hits:", body.hits.total.value);
-  res.json(body.hits);
+  INF(body);
+  const response = parseData(body,req.body.labels, req.body.aggregation, req.body.type, req.body.colors);
+  res.json(response);
   next();
 });
 
@@ -177,6 +179,38 @@ const buildTransactions = (transaction, transactions) => {
         transactions.push({...esTransaction});
     }
 };
+
+const parseData = (response, labels, aggregation, type, colors) => {
+
+    switch(type) {
+        case "bar":
+            const chartData = {
+                labels: labels,
+                datasets: []
+            };
+            const data = [];
+            if(aggregation){
+
+                labels.forEach((label) => {
+                   data.push(response.aggregations[label].count.value);
+                });
+            }
+            const datasets = [
+                {
+                    label: 'Count',
+                    backgroundColor: colors,
+                    borderColor: colors,
+                    borderWidth: 1,
+                    hoverBackgroundColor: colors,
+                    hoverBorderColor: colors,
+                    data: data
+                }
+            ];
+            chartData.datasets = datasets;
+            return chartData;
+    }
+    return [];
+}
 
 const sendWsMessage = (eventName, body) => {
     io.emit(eventName, body);
