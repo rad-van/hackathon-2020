@@ -7,7 +7,8 @@ export interface AuditDocument {
   unique_id: string,
   request: AuditRequest,
   response: AuditResponse,
-  message: AuditMessage,
+  message?: AuditMessage,
+  messages: AuditMessage[],
   allowed: boolean
 }
 
@@ -15,7 +16,17 @@ export interface AuditRequest {
   method: string,
   http_version: string,
   uri: string,
-  headers: { [key: string]: string }
+  headers: { [key: string]: string },
+  COUNTRY_CODE: string,
+  COUNTRY_NAME: string,
+  COUNTRY_CONTINENT: string,
+  REGION: string,
+  CITY: string,
+  POSTAL_CODE: string,
+  LATITUDE: string,
+  LONGITUDE: string,
+  DMA_CODE: string,
+  AREA_CODE: string,
 }
 
 export interface AuditResponse {

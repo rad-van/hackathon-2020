@@ -19,8 +19,7 @@ const App: React.FunctionComponent = () => {
   useEffect(() => {
     const socket = io('http://localhost:8088');
     socket.on('auditLog', (m: any) => {
-      console.log(m);
-      store.dispatch.realTime.addRequest(m);
+      store.dispatch.realTime.addAuditDocument(m);
     });
 
     return () => {
