@@ -1,7 +1,15 @@
 import { TUIContext, UIContext } from 'contexts/ui-context';
-import React, { useContext, useEffect } from 'react';
+import React, { PropsWithChildren, useContext, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { RootState } from 'store';
 
-function RealTime() {
+const mapState = (state: RootState) => ({
+  requests: state.realTime.requests,
+});
+
+type StateProps = ReturnType<typeof mapState> & PropsWithChildren<any>;
+
+const RealTimeRaw: React.FunctionComponent = ({ requests }: StateProps) => {
   const uiContext = useContext<TUIContext>(UIContext);
 
   useEffect(() => {
@@ -10,8 +18,14 @@ function RealTime() {
   });
 
   return (
-    <div>Hello Real Time</div>
-  );
-}
+    <>
+      <div>Hello Real Time</div>
 
-export default RealTime;
+      {requests.map((r: any) => (<p>
+        <pre>{JSON.stringify(r)}</pre>
+      </p>))}
+    </>
+  );
+};
+
+export default connect(mapState)(RealTimeRaw);
