@@ -181,10 +181,19 @@ const buildTransactions = (transaction, transactions) => {
     }
 };
 
-const parseData = (response, labels, aggregation, type, colors) => {
+
+function dynamicColors() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+}
+
+const parseData = (response, labels, aggregation, type) => {
 
     if(aggregation)
     {
+        let colors = [];
         console.log(response);
         const parsedResponse = esResponseParser.parse(response);
         let chartData = {
@@ -196,36 +205,39 @@ const parseData = (response, labels, aggregation, type, colors) => {
             case "doughnut":
             case "horizontal-bar":
                 parsedResponse.forEach((r) => {
+                    colors.push(dynamicColors());
                     chartData.labels.push(r.aggName);
                     data.push(r.count);
                 });
                 chartData.datasets = [
                     {
                         label: 'Count',
-                        backgroundColor: '#ecb3ff',
-                        hoverBackgroundColor: '#99bbff',
-                        borderColor: '#99ff66',
+                        backgroundColor: colors,
+                        hoverBackgroundColor: colors,
+                        borderColor: colors,
                         data: data
                     }
                 ];
                 return chartData;
             case "time":
                 parsedResponse.forEach((r) => {
+                    colors.push(dynamicColors());
+                    //chartData.labels.push(new Date(r.aggName).toISOString().substr(11, 8));
                     chartData.labels.push(r.aggName);
                     data.push(r.count);
                 });
                 chartData.datasets = [
                     {
                         label: 'Rules',
-                        backgroundColor: '#ecb3ff',
-                        hoverBackgroundColor: '#99bbff',
-                        borderColor: '#99ff66',
+                        backgroundColor: colors,
+                        hoverBackgroundColor: colors,
+                        borderColor: colors,
                         fill: false,
                         data: data
                     }
                 ];
                 return chartData;
-            case "bar":
+            case "blockedAllowed":
 
                 chartData = {
                     labels: labels,
@@ -235,15 +247,16 @@ const parseData = (response, labels, aggregation, type, colors) => {
                 if(aggregation){
 
                     labels.forEach((label) => {
+                        colors.push(dynamicColors());
                         data.push(response.aggregations[label].count.value);
                     });
                 }
                 chartData.datasets = [
                     {
                         label: 'Count',
-                        backgroundColor: '#ecb3ff',
-                        hoverBackgroundColor: '#99bbff',
-                        borderColor: '#99ff66',
+                        backgroundColor: colors,
+                        hoverBackgroundColor: colors,
+                        borderColor: colors,
                         data: data
                     }
                 ];

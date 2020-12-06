@@ -1,8 +1,7 @@
 export const blockedAllowedDefinition = {
     labels: ["Allowed", "Blocked"],
-    colors: ["green", "red"],
     aggregation: true,
-    type: "bar",
+    type: "blockedAllowed",
     query : {
         size: 0,
         aggs: {

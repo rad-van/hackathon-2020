@@ -5,6 +5,8 @@ import {connect} from "react-redux";
 import {HorizontalBar, Bar, Doughnut, Line} from 'react-chartjs-2';
 import {RootState} from "../../store";
 import {mapRuleId} from "../../utils/owasp-mapping";
+import {fetchData} from "../../services/service";
+import {  Row, Col  } from "antd";
 
 const mapState = (state) => ({
   charts: state.dashboard.charts,
@@ -26,221 +28,206 @@ const Dashboard = (props) => {
   useEffect(() => {
     uiContext.setTitle('Dashboard');
     uiContext.setSubTitle('General overview of your web application\'s security');
-    fetchBlockedAllowedData();
-    fetchTopRules();
-    fetchTopHosts();
-    fetchTopStatusCodes();
-    fetchTopSeverity();
-    fetchRulesPerMinute();
+    fetchData(blockedAllowedDefinition, props.setBlockedAllowedData);
+    fetchData(topRulesDefinition, props.setTopRules);
+    fetchData(topHostsDefinition, props.setTopHosts);
+    fetchData(topStatusCodesDefinition, props.setTopStatusCodes);
+    fetchData(topSeverityDefinition, props.setTopSeverity);
+    fetchData(rulesPerMinuteDefinition, props.setRulesPerMinute);
+
   }, charts);
 
-  const fetchBlockedAllowedData = () => {
-
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(blockedAllowedDefinition),
-    };
-
-    console.log(requestOptions);
-    fetch('http://localhost:8088/history', requestOptions)
-        .then((resp) => resp.json().then((body) => {
-          console.log(body);
-          props.setBlockedAllowedData(body)
-        }));
-  };
-
-    const fetchTopRules = () => {
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(topRulesDefinition),
-        };
-
-        console.log(requestOptions);
-        fetch('http://localhost:8088/history', requestOptions)
-            .then((resp) => resp.json().then((body) => {
-                console.log(body);
-                props.setTopRules(body)
-            }));
-    };
-
-    const fetchTopHosts = () => {
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(topHostsDefinition),
-        };
-
-        console.log(requestOptions);
-        fetch('http://localhost:8088/history', requestOptions)
-            .then((resp) => resp.json().then((body) => {
-                console.log(body);
-                props.setTopHosts(body)
-            }));
-    };
-
-    const fetchTopStatusCodes = () => {
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(topStatusCodesDefinition),
-        };
-
-        console.log(requestOptions);
-        fetch('http://localhost:8088/history', requestOptions)
-            .then((resp) => resp.json().then((body) => {
-                console.log(body);
-                props.setTopStatusCodes(body)
-            }));
-    };
-    const fetchTopSeverity = () => {
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(topSeverityDefinition),
-        };
-
-        console.log(requestOptions);
-        fetch('http://localhost:8088/history', requestOptions)
-            .then((resp) => resp.json().then((body) => {
-                console.log(body);
-                props.setTopSeverity(body)
-            }));
-    };
-
-    const fetchRulesPerMinute = () => {
-
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(rulesPerMinuteDefinition),
-        };
-
-        console.log(requestOptions);
-        fetch('http://localhost:8088/history', requestOptions)
-            .then((resp) => resp.json().then((body) => {
-                console.log(body);
-                props.setRulesPerMinute(body)
-            }));
-    };
-
   return (
-    <div>Hello Dashboard
-      <div>
-        <Bar
-          data={props.charts.blockedAllowed.data}
-          height={300}
-          width={100}
-          options={{
-              title: {
-                  display: true,
-                  text: "Blocked and Allowed Requests"
-              },
-              legend: {
-                  display: false,
-              },
-              maintainAspectRatio: false
-          }}
-      />
-      </div>
-      <div>
-        <HorizontalBar
-            data={{datasets: props.charts.topRules.data.datasets, labels: props.charts.topRules.data.labels.map(m => mapRuleId(m).category)}}
-            height={300}
-            width={100}
-            options={{
-                title: {
-                    display: true,
-                    text: "Top Rules"
-                },
-                legend: {
-                    display: false,
-                },
-                maintainAspectRatio: false
-            }}
-        />
-      </div>
-
-      <div>
-        <Doughnut
-            data={props.charts.topHosts.data}
-              height={300}
-              width={100}
-              options={{
-                  title: {
-                      display: true,
-                      text: "Top Hosts"
-                  },
-                  legend: {
-                      position: "left",
-                  },
-                  maintainAspectRatio: false
-              }}/>
-      </div>
-      <div>
-        <Doughnut
-            data={props.charts.topStatusCodes.data}
-            height={300}
-            width={100}
-            options={{
-                title: {
-                    display: true,
-                    text: "Top Status Codes"
-                },
-                legend: {
-                    position: "left",
-                },
-                maintainAspectRatio: false
-            }}/>
-       </div>
-       <div>
-         <HorizontalBar
-            data={props.charts.topSeverity.data}
-            height={300}
-            width={100}
-            options={{
-                title: {
-                    display: true,
-                    text: "Top Severity"
-                },
-                legend: {
-                    display: false,
-                },
-                maintainAspectRatio: false
-            }}
-         />
-       </div>
-       <div>
-            <Line
-                data={props.charts.rulesPerMinute.data}
-                height={100}
+    <div>
+      <Row>
+          <Col span={12}>
+              <Bar
+                  data={props.charts.blockedAllowed.data}
+                  height={300}
+                  width={100}
+                  options={{
+                      title: {
+                          display: true,
+                          text: "Blocked and Allowed Requests"
+                      },
+                      legend: {
+                          display: false,
+                      },
+                      scales: {
+                          xAxes: [{
+                              gridLines: {
+                                  display: false
+                              }
+                          }],
+                          yAxes: [{
+                              gridLines: {
+                                  display: false
+                              }
+                          }]
+                      },
+                      maintainAspectRatio: false
+                  }}
+              />
+          </Col>
+          <Col span={12}>
+              <HorizontalBar
+                  data={{datasets: props.charts.topRules.data.datasets, labels: props.charts.topRules.data.labels.map(m => mapRuleId(m).category)}}
+                  height={300}
+                  width={100}
+                  options={{
+                      title: {
+                          display: true,
+                          text: "Top Rules"
+                      },
+                      legend: {
+                          display: false,
+                      },
+                      scales: {
+                          xAxes: [{
+                              gridLines: {
+                                  display: false
+                              }
+                          }],
+                          yAxes: [{
+                              ticks: {
+                                  autoSkip: false,
+                                  fontFamily: 'Roboto, Areal, sans-serif',
+                              },
+                              gridLines: {
+                                  display: false
+                              }
+                          }]
+                      },
+                      maintainAspectRatio: false
+                  }}
+              />
+          </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+            <Doughnut
+                data={props.charts.topHosts.data}
+                height={300}
                 width={100}
                 options={{
-                    responsive: true,
+                    title: {
+                        display: true,
+                        text: "Top Hosts"
+                    },
                     legend: {
-                        display: false
+                        position: "left",
                     },
                     scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
+                        xAxes: [{
+                            display: false,
+                            gridLines: {
+                                display: false
                             }
                         }],
-                        xAxes: [{
-                            type: 'time',
-                            time: {
-                                unit: 'minute'
+                        yAxes: [{
+                            gridLines: {
+                                display: false
                             }
                         }]
-                    }
-                }}
-            />
-       </div>
+                    },
+                    maintainAspectRatio: false
+                }}/>
+        </Col>
+        <Col span={12}>
+            <Doughnut
+                data={props.charts.topStatusCodes.data}
+                height={300}
+                width={100}
+                options={{
+                    title: {
+                        display: true,
+                        text: "Top Status Codes"
+                    },
+                    legend: {
+                        position: "left",
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: false,
+                            gridLines: {
+                                display: false
+                            }
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                display: false
+                            }
+                        }]
+                    },
+                    maintainAspectRatio: false
+                }}/>
+        </Col>
+      </Row>
+      <Row>
+          <Col span={12}>
+              <HorizontalBar
+                  data={props.charts.topSeverity.data}
+                  height={300}
+                  width={100}
+                  options={{
+                      title: {
+                          display: true,
+                          text: "Top Severity"
+                      },
+                      legend: {
+                          display: false,
+                      },
+                      scales: {
+                          xAxes: [{
+                              gridLines: {
+                                  display: false
+                              }
+                          }],
+                          yAxes: [{
+                              gridLines: {
+                                  display: false
+                              }
+                          }]
+                      },
+                      maintainAspectRatio: false
+                  }}
+              />
+          </Col>
+          <Col span={12}>
+              <Line
+                  data={props.charts.rulesPerMinute.data}
+                  height={300}
+                  width={100}
+                  options={{
+                      maintainAspectRatio: false,
+                      title: {
+                          display: true,
+                          text: "Rules Per Minute"
+                      },
+                      legend: {
+                          display: false
+                      },
+                      scales: {
+                          xAxes: [{
+                              gridLines: {
+                                  display: false
+                              },
+                              type: 'time',
+                              distribution: 'series'
+                          }],
+                          yAxes: [{
+                              gridLines: {
+                                  display: false
+                              },
+                              ticks: {
+                                  beginAtZero: true
+                              }
+                          }]
+                      }
+                  }}
+              />
+          </Col>
+      </Row>
     </div>
   );
 
