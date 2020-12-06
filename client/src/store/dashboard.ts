@@ -2,7 +2,8 @@ import { createModel } from '@rematch/core';
 import { RootModel } from 'store';
 
 export interface DashboardState {
-  charts: {}
+  charts: {},
+  timeRange: {startTime: number, endTime: any}
 }
 
 export const dashboard = createModel<RootModel>({
@@ -14,7 +15,8 @@ export const dashboard = createModel<RootModel>({
       topStatusCodes: {data : {}},
       topSeverity: {data : {}},
       rulesPerMinute: {data : {}}
-    }
+    },
+    timeRange: {startTime: Date.now() - 900000, endTime: null}
   } as DashboardState,
   reducers: {
     setBlockedAllowedData(state, payload) {
@@ -51,6 +53,12 @@ export const dashboard = createModel<RootModel>({
       return {
         ...state,
         charts: {...state.charts, rulesPerMinute: {data: payload}},
+      };
+    },
+    setTimeRange(state, payload) {
+      return {
+        ...state,
+        timeRange: {startTime: payload[0].valueOf, endTime: payload[1].valueOf},
       };
     },
   },

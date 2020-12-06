@@ -6,10 +6,12 @@ import {HorizontalBar, Bar, Doughnut, Line} from 'react-chartjs-2';
 import {RootState} from "../../store";
 import {mapRuleId} from "../../utils/owasp-mapping";
 import {fetchData} from "../../services/service";
-import {  Row, Col, Card  } from "antd";
+import {  Row, Col, Card, DatePicker  } from "antd";
 
+const { RangePicker } = DatePicker;
 const mapState = (state) => ({
   charts: state.dashboard.charts,
+  timeRange: state.dashboard.timeRange,
 });
 
 const mapDispatch = dispatch => ({
@@ -19,26 +21,56 @@ const mapDispatch = dispatch => ({
   setTopStatusCodes : dispatch.dashboard.setTopStatusCodes,
   setTopSeverity : dispatch.dashboard.setTopSeverity,
   setRulesPerMinute : dispatch.dashboard.setRulesPerMinute,
+  setTimeRange : dispatch.dashboard.setTimeRange,
 });
 
 const Dashboard = (props) => {
   const uiContext = useContext(UIContext);
-  const charts = useState({});
+  const {charts} = useState({});
 
+  console.log(props.timeRange);
   useEffect(() => {
     uiContext.setTitle('Dashboard');
     uiContext.setSubTitle('General overview of your web application\'s security');
-    fetchData(blockedAllowedDefinition, props.setBlockedAllowedData);
-    fetchData(topRulesDefinition, props.setTopRules);
-    fetchData(topHostsDefinition, props.setTopHosts);
-    fetchData(topStatusCodesDefinition, props.setTopStatusCodes);
-    fetchData(topSeverityDefinition, props.setTopSeverity);
-    fetchData(rulesPerMinuteDefinition, props.setRulesPerMinute);
+    fetchData(blockedAllowedDefinition, props.setBlockedAllowedData, props.timeRange);
+    fetchData(topRulesDefinition, props.setTopRules, props.timeRange);
+    fetchData(topHostsDefinition, props.setTopHosts, props.timeRange);
+    fetchData(topStatusCodesDefinition, props.setTopStatusCodes, props.timeRange);
+    fetchData(topSeverityDefinition, props.setTopSeverity, props.timeRange);
+    fetchData(rulesPerMinuteDefinition, props.setRulesPerMinute, props.timeRange);
 
-  }, charts);
+  }, [charts, props.timeRange]);
+
+    function onChange(value, dateString) {
+        console.log('Selected Time: ', value);
+        console.log('Formatted Selected Time: ', dateString);
+    }
+
+    function onOk(value) {
+        if(value.length === 2){
+            if(value[0] !== null && value[1] !== null){
+                console.log('start: ', value[0].valueOf());
+                console.log('end: ', value[1].valueOf());
+                props.setTimeRange(value);
+            }
+
+        }
+
+    }
 
   return (
     <div>
+      <Row>
+          <Col span={6} offset={18}>
+              <RangePicker
+                  showTime={{ format: 'HH:mm' }}
+                  format="YYYY-MM-DD HH:mm"
+                  onChange={onChange}
+                  onOk={onOk}
+              />
+          </Col>
+
+      </Row>
       <Row>
           <Col span={12}>
               <Card title="Blocked and Allowed Requests">
@@ -59,6 +91,9 @@ const Dashboard = (props) => {
                               yAxes: [{
                                   gridLines: {
                                       display: false
+                                  },
+                                  ticks: {
+                                      beginAtZero: true
                                   }
                               }]
                           },
@@ -203,6 +238,9 @@ const Dashboard = (props) => {
                                   display: false
                               },
                               type: 'time',
+                              time: {
+                                  unit: 'minute'
+                              },
                               distribution: 'series'
                           }],
                           yAxes: [{
