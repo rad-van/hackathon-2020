@@ -228,7 +228,7 @@ const parseData = (response, labels, aggregation, type) => {
                 });
                 chartData.datasets = [
                     {
-                        label: 'Rules',
+                        label: 'Requests',
                         backgroundColor: colors,
                         hoverBackgroundColor: colors,
                         borderColor: colors,

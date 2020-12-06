@@ -6,7 +6,7 @@ import {HorizontalBar, Bar, Doughnut, Line} from 'react-chartjs-2';
 import {RootState} from "../../store";
 import {mapRuleId} from "../../utils/owasp-mapping";
 import {fetchData} from "../../services/service";
-import {  Row, Col  } from "antd";
+import {  Row, Col, Card  } from "antd";
 
 const mapState = (state) => ({
   charts: state.dashboard.charts,
@@ -41,44 +41,40 @@ const Dashboard = (props) => {
     <div>
       <Row>
           <Col span={12}>
-              <Bar
-                  data={props.charts.blockedAllowed.data}
-                  height={300}
-                  width={100}
-                  options={{
-                      title: {
-                          display: true,
-                          text: "Blocked and Allowed Requests"
-                      },
-                      legend: {
-                          display: false,
-                      },
-                      scales: {
-                          xAxes: [{
-                              gridLines: {
-                                  display: false
-                              }
-                          }],
-                          yAxes: [{
-                              gridLines: {
-                                  display: false
-                              }
-                          }]
-                      },
-                      maintainAspectRatio: false
-                  }}
-              />
+              <Card title="Blocked and Allowed Requests">
+                  <Bar
+                      data={props.charts.blockedAllowed.data}
+                      height={300}
+                      width={100}
+                      options={{
+                          legend: {
+                              display: false,
+                          },
+                          scales: {
+                              xAxes: [{
+                                  gridLines: {
+                                      display: false
+                                  }
+                              }],
+                              yAxes: [{
+                                  gridLines: {
+                                      display: false
+                                  }
+                              }]
+                          },
+                          maintainAspectRatio: false
+                      }}
+                  />
+              </Card>
+
           </Col>
           <Col span={12}>
+              <Card title="Top Rules">
               <HorizontalBar
                   data={{datasets: props.charts.topRules.data.datasets, labels: props.charts.topRules.data.labels.map(m => mapRuleId(m).category)}}
                   height={300}
                   width={100}
                   options={{
-                      title: {
-                          display: true,
-                          text: "Top Rules"
-                      },
                       legend: {
                           display: false,
                       },
@@ -101,19 +97,17 @@ const Dashboard = (props) => {
                       maintainAspectRatio: false
                   }}
               />
+              </Card>
           </Col>
       </Row>
       <Row>
         <Col span={12}>
+            <Card title="Top Hosts">
             <Doughnut
                 data={props.charts.topHosts.data}
                 height={300}
                 width={100}
                 options={{
-                    title: {
-                        display: true,
-                        text: "Top Hosts"
-                    },
                     legend: {
                         position: "left",
                     },
@@ -125,6 +119,7 @@ const Dashboard = (props) => {
                             }
                         }],
                         yAxes: [{
+                            display: false,
                             gridLines: {
                                 display: false
                             }
@@ -132,17 +127,15 @@ const Dashboard = (props) => {
                     },
                     maintainAspectRatio: false
                 }}/>
+            </Card>
         </Col>
         <Col span={12}>
+            <Card title="Top Status Codes">
             <Doughnut
                 data={props.charts.topStatusCodes.data}
                 height={300}
                 width={100}
                 options={{
-                    title: {
-                        display: true,
-                        text: "Top Status Codes"
-                    },
                     legend: {
                         position: "left",
                     },
@@ -154,6 +147,7 @@ const Dashboard = (props) => {
                             }
                         }],
                         yAxes: [{
+                            display: false,
                             gridLines: {
                                 display: false
                             }
@@ -161,19 +155,17 @@ const Dashboard = (props) => {
                     },
                     maintainAspectRatio: false
                 }}/>
+            </Card>
         </Col>
       </Row>
       <Row>
           <Col span={12}>
+              <Card title="Top Severity">
               <HorizontalBar
                   data={props.charts.topSeverity.data}
                   height={300}
                   width={100}
                   options={{
-                      title: {
-                          display: true,
-                          text: "Top Severity"
-                      },
                       legend: {
                           display: false,
                       },
@@ -192,18 +184,16 @@ const Dashboard = (props) => {
                       maintainAspectRatio: false
                   }}
               />
+              </Card>
           </Col>
           <Col span={12}>
+              <Card title="Requests Per Minute">
               <Line
                   data={props.charts.rulesPerMinute.data}
                   height={300}
                   width={100}
                   options={{
                       maintainAspectRatio: false,
-                      title: {
-                          display: true,
-                          text: "Rules Per Minute"
-                      },
                       legend: {
                           display: false
                       },
@@ -226,6 +216,7 @@ const Dashboard = (props) => {
                       }
                   }}
               />
+              </Card>
           </Col>
       </Row>
     </div>
