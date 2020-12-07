@@ -24,34 +24,18 @@ export const blockedAllowedDefinition = {
     request: {
         labels: ["Allowed", "Blocked"],
         aggregation: true,
-        type: "blockedAllowed",
+        type: "horizontal-bar",
         query : {
             size: 0,
             aggs: {
-                Allowed: {
-                    filter: {
-                        term: {
-                            allowed: true
-                        }
+                aggName: {
+                    terms: {
+                        field: "status.keyword"
                     },
                     aggs: {
                         count: {
                             value_count: {
-                                field: "allowed"
-                            }
-                        }
-                    }
-                },
-                Blocked: {
-                    filter: {
-                        term: {
-                            allowed: false
-                        }
-                    },
-                    aggs: {
-                        count: {
-                            value_count: {
-                                field: "allowed"
+                                field: "status.keyword"
                             }
                         }
                     }

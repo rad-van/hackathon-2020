@@ -162,7 +162,7 @@ const buildTransactions = (transaction, transactions) => {
         INF('=== blocked request on [', transaction.request.uri, ']');
         transaction.messages.forEach((message) => {
                 esTransaction.message = message;
-                esTransaction.allowed = false;
+                esTransaction.status = "Blocked";
                 if(message.details.ruleId === "10") {
                     message.details.tags.filter(t => t.includes("||")).forEach((tag) => {
                         const geoInfo = tag.split('||');
@@ -175,7 +175,7 @@ const buildTransactions = (transaction, transactions) => {
         );
     }
     else{
-        esTransaction.allowed = true;
+        esTransaction.status = "Allowed";
         sendWsMessage("auditLog", {...esTransaction});
         transactions.push({...esTransaction});
     }
@@ -239,32 +239,6 @@ const parseData = (response, labels, aggregation, type) => {
                             hoverBackgroundColor: colors,
                             borderColor: colors,
                             fill: false,
-                            data: data
-                        }
-                    ];
-                }
-                return chartData;
-            case "blockedAllowed":
-
-                chartData = {
-                    labels: labels,
-                    datasets: []
-                };
-                data = [];
-                if(aggregation){
-
-                    labels.forEach((label) => {
-                        colors.push(dynamicColors());
-                        data.push(response.aggregations[label].count.value);
-                    });
-                }
-                if(data.length > 0) {
-                    chartData.datasets = [
-                        {
-                            label: 'Count',
-                            backgroundColor: colors,
-                            hoverBackgroundColor: colors,
-                            borderColor: colors,
                             data: data
                         }
                     ];
