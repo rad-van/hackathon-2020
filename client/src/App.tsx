@@ -4,6 +4,7 @@ import 'App.less';
 import Audit from 'components/audit/Audit';
 import Configuration from 'components/configuration/Configuration';
 import Migration from 'components/migration/Migration';
+import Upgrade from 'components/upgrade/Upgrade';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
 import { UIContext, UIContextProvider } from 'contexts/ui-context';
@@ -111,10 +112,7 @@ const App: React.FunctionComponent = () => {
 
                 <Content className="main-content">
                   <Switch>
-                    <Route path="/upgrade" component={() => {
-                      window.open( 'https://www.radware.com/products/appwall/', '_blank');
-                      return null;
-                    }}/>
+                    <Route path="/upgrade" component={Upgrade}/>
                     <Route path="/real-time" component={RealTime} />
                     <Route path="/audit" component={Audit} />
                     <Route path="/configuration" component={Configuration} />
