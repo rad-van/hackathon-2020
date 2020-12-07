@@ -1,8 +1,9 @@
-import { DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined } from '@ant-design/icons';
+import { DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
 import { Layout, Menu, PageHeader } from 'antd';
 import 'App.less';
 import Audit from 'components/audit/Audit';
 import Configuration from 'components/configuration/Configuration';
+import Migration from 'components/migration/Migration';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
 import { UIContext, UIContextProvider } from 'contexts/ui-context';
@@ -57,6 +58,9 @@ const App: React.FunctionComponent = () => {
                 <Menu.Item key={`/configuration`} icon={<SettingOutlined />}>
                   <Link to={`/configuration`}>Configuration</Link>
                 </Menu.Item>
+                <Menu.Item key={`/migration`} icon={<TrademarkOutlined />}>
+                  <Link to={`/migration`}>Migration</Link>
+                </Menu.Item>
 
                 {/*            <SubMenu key="sub1" icon={<DashboardOutlined />} title="Navigation One">
                 <Menu.ItemGroup key="g1" title="Item 1">
@@ -103,6 +107,7 @@ const App: React.FunctionComponent = () => {
                     <Route path="/real-time" component={RealTime} />
                     <Route path="/audit" component={Audit} />
                     <Route path="/configuration" component={Configuration} />
+                    <Route path="/migration" component={Migration} />
                     <Route path="/" component={Dashboard} />
                   </Switch>
                 </Content>
