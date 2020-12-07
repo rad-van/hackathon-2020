@@ -1,4 +1,4 @@
-import { DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined } from '@ant-design/icons';
+import { TrademarkOutlined, DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined } from '@ant-design/icons';
 import { Layout, Menu, PageHeader } from 'antd';
 import 'App.less';
 import Audit from 'components/audit/Audit';
