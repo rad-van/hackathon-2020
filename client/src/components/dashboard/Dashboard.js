@@ -87,7 +87,7 @@ const Dashboard = (props) => {
           <Col span={12}>
               <Card title="Top Rules">
                   <HorizontalBar
-                      data={{datasets: props.charts.topRules.data.datasets, labels: props.charts.topRules.data.labels.map(m => mapRuleId(m).title)}}
+                      data={{datasets: props.charts.topRules.data.datasets, labels: props.charts.topRules.data.labels.map(m => m + "-" +  mapRuleId(m).title)}}
                       height={300}
                       width={100}
                       options={topRulesDefinition.options}
