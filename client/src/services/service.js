@@ -38,8 +38,9 @@ export const fetchData = (definition, action, timeRange) => {
         body: JSON.stringify(definition.request),
     };
 
+    const backend_host = process.env.REACT_APP_BACKEND_HOST || 'localhost';
     console.log(requestOptions);
-    fetch('http://localhost:8088/history', requestOptions)
+    fetch(`http://${backend_host}:8088/history`, requestOptions)
         .then((resp) => resp.json().then((body) => {
             console.log(body);
             action(body);

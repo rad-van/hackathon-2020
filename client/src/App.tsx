@@ -18,7 +18,8 @@ const { Content, Sider } = Layout;
 
 const App: React.FunctionComponent = () => {
   useEffect(() => {
-    const socket = io('http://localhost:8088');
+    const backend_host = process.env.REACT_APP_BACKEND_HOST || 'localhost';
+    const socket = io(`http://${backend_host}:8088`);
     socket.on('auditLog', (m: any) => {
       store.dispatch.realTime.addAuditDocument(m);
     });
