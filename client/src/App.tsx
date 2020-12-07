@@ -1,4 +1,4 @@
-import { DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined, TrademarkOutlined } from '@ant-design/icons';
+import { TrademarkOutlined, DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined } from '@ant-design/icons';
 import { Layout, Menu, PageHeader } from 'antd';
 import 'App.less';
 import Audit from 'components/audit/Audit';
@@ -7,7 +7,8 @@ import Migration from 'components/migration/Migration';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
 import { UIContext, UIContextProvider } from 'contexts/ui-context';
-import { ReactComponent as FireWafLogo } from 'firewaf.svg';
+import logo from 'logo.svg';
+// import { ReactComponent as FireWafLogo } from 'radware.svg';
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
@@ -36,8 +37,10 @@ const App: React.FunctionComponent = () => {
           <Layout style={{ minHeight: '100vh' }}>
             <Sider className="menu-sider" width={300}>
               <div className="firewaf-title">
-                <FireWafLogo />
-                <h1>Radware FireWAF</h1>
+                <img src={logo} style={{height:'70px'}} alt={'Radware'}/>
+                <div>
+                  <h3>WAF Lite</h3>
+                </div>
               </div>
 
               <Menu
@@ -61,6 +64,9 @@ const App: React.FunctionComponent = () => {
                 </Menu.Item>
                 <Menu.Item key={`/migration`} icon={<TrademarkOutlined />}>
                   <Link to={`/migration`}>Migration</Link>
+                </Menu.Item>
+                <Menu.Item key={`/upgrade`} icon={<DollarCircleOutlined />}>
+                  <Link to={`/upgrade`}>Upgrade</Link>
                 </Menu.Item>
 
                 {/*            <SubMenu key="sub1" icon={<DashboardOutlined />} title="Navigation One">
@@ -105,6 +111,10 @@ const App: React.FunctionComponent = () => {
 
                 <Content className="main-content">
                   <Switch>
+                    <Route path="/upgrade" component={() => {
+                      window.open( 'https://www.radware.com/products/appwall/', '_blank');
+                      return null;
+                    }}/>
                     <Route path="/real-time" component={RealTime} />
                     <Route path="/audit" component={Audit} />
                     <Route path="/configuration" component={Configuration} />
