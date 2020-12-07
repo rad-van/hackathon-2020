@@ -57,6 +57,7 @@ export const topRulesDefinition = {
                     display: false,
                 },
                 ticks: {
+                    beginAtZero: true,
                     stepSize: 1,
                 }
             }],
@@ -198,6 +199,7 @@ export const topSeverityDefinition = {
                 },
                 ticks: {
                     stepSize: 1,
+                    beginAtZero: true,
                 }
             }],
             yAxes: [{
@@ -253,6 +255,7 @@ export const rulesPerMinuteDefinition = {
                     display: false
                 },
                 ticks: {
+                    stepSize: 1,
                     beginAtZero: true
                 }
             }]
@@ -324,6 +327,17 @@ export const topClientsDefinition = {
                     }
                 }
             }
+        }
+    }
+
+}
+
+
+export const auditLogDefinition = {
+    request: {
+        aggregation: false,
+        query : {
+
         }
     }
 
