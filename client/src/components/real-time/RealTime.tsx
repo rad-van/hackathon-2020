@@ -9,7 +9,7 @@ import { AuditDocument } from 'store/types/audit-document';
 import { mapRuleId } from 'utils/owasp-mapping';
 
 const mapState = (state: RootState) => ({
-  requests: state.realTime.auditDocuments.filter(ad => !ad.allowed).slice(0, 10),
+  requests: state.realTime.auditDocuments.filter(ad => ad.status === 'Blocked').slice(0, 10),
 });
 
 type Props = ReturnType<typeof mapState>;

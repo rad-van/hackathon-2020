@@ -9,7 +9,7 @@ export interface AuditDocument {
   response: AuditResponse,
   message?: AuditMessage,
   messages: AuditMessage[],
-  allowed: boolean
+  status: 'Allowed' | 'Blocked',
 }
 
 export interface AuditRequest {
