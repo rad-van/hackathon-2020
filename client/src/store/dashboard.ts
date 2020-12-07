@@ -14,6 +14,7 @@ export const dashboard = createModel<RootModel>({
       topHosts: {data : {}},
       topStatusCodes: {data : {}},
       topSeverity: {data : {}},
+      topClients: {data: {}},
       rulesPerMinute: {data : {}}
     },
     timeRange: {startTime: Date.now() - 900000, endTime: null}
@@ -35,6 +36,12 @@ export const dashboard = createModel<RootModel>({
       return {
         ...state,
         charts: {...state.charts, topHosts: {data: payload}},
+      };
+    },
+    setTopClients(state, payload) {
+      return {
+        ...state,
+        charts: {...state.charts, topClients: {data: payload}},
       };
     },
     setTopStatusCodes(state, payload) {

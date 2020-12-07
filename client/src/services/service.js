@@ -1,7 +1,7 @@
 export const fetchData = (definition, action, timeRange) => {
 
     if(timeRange.startTime && timeRange.endTime){
-        definition.query.query = {
+        definition.request.query.query = {
             bool: {
                 must: [
                     {
@@ -17,8 +17,7 @@ export const fetchData = (definition, action, timeRange) => {
         }
     }
     else if(timeRange.startTime) {
-        console.log(timeRange.startTime);
-        definition.query.query = {
+        definition.request.query.query = {
             bool: {
                 must: [
                     {
@@ -33,11 +32,10 @@ export const fetchData = (definition, action, timeRange) => {
         }
 
     }
-    console.log(definition)
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(definition),
+        body: JSON.stringify(definition.request),
     };
 
     console.log(requestOptions);

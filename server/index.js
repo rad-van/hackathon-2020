@@ -209,33 +209,40 @@ const parseData = (response, labels, aggregation, type) => {
                     chartData.labels.push(r.aggName);
                     data.push(r.count);
                 });
-                chartData.datasets = [
-                    {
-                        label: 'Count',
-                        backgroundColor: colors,
-                        hoverBackgroundColor: colors,
-                        borderColor: colors,
-                        data: data
-                    }
-                ];
+                if(data.length > 0) {
+                    chartData.datasets = [
+                        {
+                            label: 'Count',
+                            backgroundColor: colors,
+                            hoverBackgroundColor: colors,
+                            borderColor: colors,
+                            data: data
+                        }
+                    ];
+                }
+
                 return chartData;
             case "time":
-                parsedResponse.forEach((r) => {
+                console.log(response);
+                response.aggregations.aggName.buckets.forEach((r) => {
                     colors.push(dynamicColors());
                     //chartData.labels.push(new Date(r.aggName).toISOString().substr(11, 8));
-                    chartData.labels.push(r.aggName);
-                    data.push(r.count);
+                    console.log(r);
+                    chartData.labels.push(r.key);
+                    data.push(r.count.value);
                 });
-                chartData.datasets = [
-                    {
-                        label: 'Requests',
-                        backgroundColor: colors,
-                        hoverBackgroundColor: colors,
-                        borderColor: colors,
-                        fill: false,
-                        data: data
-                    }
-                ];
+                if(data.length > 0){
+                    chartData.datasets = [
+                        {
+                            label: 'Requests',
+                            backgroundColor: colors,
+                            hoverBackgroundColor: colors,
+                            borderColor: colors,
+                            fill: false,
+                            data: data
+                        }
+                    ];
+                }
                 return chartData;
             case "blockedAllowed":
 
@@ -251,15 +258,17 @@ const parseData = (response, labels, aggregation, type) => {
                         data.push(response.aggregations[label].count.value);
                     });
                 }
-                chartData.datasets = [
-                    {
-                        label: 'Count',
-                        backgroundColor: colors,
-                        hoverBackgroundColor: colors,
-                        borderColor: colors,
-                        data: data
-                    }
-                ];
+                if(data.length > 0) {
+                    chartData.datasets = [
+                        {
+                            label: 'Count',
+                            backgroundColor: colors,
+                            hoverBackgroundColor: colors,
+                            borderColor: colors,
+                            data: data
+                        }
+                    ];
+                }
                 return chartData;
         }
     }
