@@ -35,7 +35,7 @@ services:
 
   # The modsec/nginx firewall
   waf:
-    image: 'dregis.strangeloop.net/hackathon-2020/wafmod:3.0.7'
+    image: 'lgillstrom/wafmod:3.0.7'
     container_name: waf
     networks:
       - hackathon
@@ -47,9 +47,7 @@ services:
 
   # Our backend server
   be:
-    build:
-      context: ./server
-    image: 'dregis.strangeloop.net/hackathon-2020/server:1.0.0'
+    image: 'lgillstrom/wafserver:1.0.0'
     container_name: be
     networks:
       - hackathon
@@ -63,7 +61,7 @@ services:
     depends_on:
       - es
   hackme:
-    image: 'dregis.strangeloop.net/hackathon-2020/hackme:1.0.1'
+    image: 'lgillstrom/hackme:1.0.1'
     container_name: hackme
     networks:
       - hackathon
