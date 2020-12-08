@@ -148,7 +148,7 @@ const buildTransactions = (transaction, transactions) => {
     let esTransaction = {};
     const {http_code, headers} =  transaction.response;
 
-    esTransaction.client_ip = transaction.client_ip;
+    esTransaction.client_ip = transaction.request.headers && transaction.request.headers["55555"] ? transaction.request.headers["55555"] : transaction.client_ip;
 
     esTransaction.time_stamp = Date.parse(transaction.time_stamp);
     esTransaction.client_port = transaction.client_port;

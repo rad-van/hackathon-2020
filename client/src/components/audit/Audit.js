@@ -75,6 +75,14 @@ const Audit = (props) => {
     fetchRawData(auditLogDefinition, props.setData, props.timeRange);
   }, [data, props.timeRange]);
 
+  useEffect( () => () => {
+      let start = moment(Date.now() - 900000);
+      let end = null;
+      let values = [start, end];
+      props.setTimeRange(values);
+  },
+ [] );
+
   return (
     <div>
       <Row>

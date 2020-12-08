@@ -3,7 +3,8 @@ import { RootModel } from 'store';
 
 export interface DashboardState {
   charts: {},
-  timeRange: {startTime: number, endTime: any}
+  timeRange: {startTime: number, endTime: any},
+  autoRefresh: boolean
 }
 
 export const dashboard = createModel<RootModel>({
@@ -17,7 +18,8 @@ export const dashboard = createModel<RootModel>({
       topClients: {data: {}},
       rulesPerMinute: {data : {}}
     },
-    timeRange: {startTime: Date.now() - 900000, endTime: null}
+    timeRange: {startTime: Date.now() - 900000, endTime: null},
+    autoRefresh: true
   } as DashboardState,
   reducers: {
     setBlockedAllowedData(state, payload) {
@@ -65,7 +67,8 @@ export const dashboard = createModel<RootModel>({
     setTimeRange(state, payload) {
       return {
         ...state,
-        timeRange: {startTime: payload[0].valueOf(), endTime: payload[1].valueOf()},
+        autoRefresh: payload.autoRefresh ? payload.autoRefresh : true,
+        timeRange: {startTime: payload.value[0].valueOf(), endTime: payload.value[1] !== null ? payload.value[1].valueOf() : null},
       };
     },
   },
