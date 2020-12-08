@@ -65,7 +65,7 @@ export const dashboard = createModel<RootModel>({
     setTimeRange(state, payload) {
       return {
         ...state,
-        timeRange: {startTime: payload[0].valueOf, endTime: payload[1].valueOf},
+        timeRange: {startTime: payload[0].valueOf(), endTime: payload[1].valueOf()},
       };
     },
   },

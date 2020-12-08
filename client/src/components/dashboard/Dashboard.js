@@ -47,7 +47,6 @@ const Dashboard = (props) => {
             }
 
         }
-
     }
 
   return (
