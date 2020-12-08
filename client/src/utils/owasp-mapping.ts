@@ -9,7 +9,7 @@ export interface RuleInfo {
 
 export const RULE_ID_MAPPINGS: { [key: string]: RuleInfo } = {
   '10': {
-    display: true,
+    display: false,
     category: 'REQUEST-10-GEO-IP-DATA',
     title: 'Geo IP Data',
     description: 'Geo IP Data',

@@ -1,9 +1,11 @@
-import { TrademarkOutlined, DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined } from '@ant-design/icons';
+import { DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined, BarsOutlined, ControlOutlined, FileProtectOutlined } from '@ant-design/icons';
 import { Layout, Menu, PageHeader } from 'antd';
 import 'App.less';
 import Audit from 'components/audit/Audit';
-import Configuration from 'components/configuration/Configuration';
-import Migration from 'components/migration/Migration';
+import Protections from 'components/configuration/Protections';
+import Rules from 'components/configuration/Rules';
+import Settings from 'components/configuration/Settings';
+import Upgrade from 'components/upgrade/Upgrade';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
 import { UIContext, UIContextProvider } from 'contexts/ui-context';
@@ -59,40 +61,20 @@ const App: React.FunctionComponent = () => {
                 <Menu.Item key={`/audit`} icon={<FundViewOutlined />}>
                   <Link to={`/audit`}>Audit</Link>
                 </Menu.Item>
-                <Menu.Item key={`/configuration`} icon={<SettingOutlined />}>
-                  <Link to={`/configuration`}>Configuration</Link>
-                </Menu.Item>
-                <Menu.Item key={`/migration`} icon={<TrademarkOutlined />}>
-                  <Link to={`/migration`}>Migration</Link>
-                </Menu.Item>
+                <Menu.SubMenu key="config" icon={<SettingOutlined />} title="Configuration">
+                  <Menu.Item key={`/protections`} icon={<FileProtectOutlined />}>
+                    <Link to={`/protections`}>Protected Web Apps</Link>
+                  </Menu.Item>
+                  <Menu.Item key={`/rules`} icon={<BarsOutlined />}>
+                    <Link to={`/rules`}>Rules</Link>
+                  </Menu.Item>
+                  <Menu.Item key={`/settings`} icon={<ControlOutlined />}>
+                    <Link to={`/settings`}>Settings</Link>
+                  </Menu.Item>
+                </Menu.SubMenu>
                 <Menu.Item key={`/upgrade`} icon={<DollarCircleOutlined />}>
                   <Link to={`/upgrade`}>Upgrade</Link>
                 </Menu.Item>
-
-                {/*            <SubMenu key="sub1" icon={<DashboardOutlined />} title="Navigation One">
-                <Menu.ItemGroup key="g1" title="Item 1">
-                  <Menu.Item key="1">Option 1</Menu.Item>
-                  <Menu.Item key="2">Option 2</Menu.Item>
-                </Menu.ItemGroup>
-                <Menu.ItemGroup key="g2" title="Item 2">
-                  <Menu.Item key="3">Option 3</Menu.Item>
-                  <Menu.Item key="4">Option 4</Menu.Item>
-                </Menu.ItemGroup>
-              </SubMenu>
-              <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-                <Menu.Item key="5">Option 5</Menu.Item>
-                <Menu.Item key="6">Option 6</Menu.Item>
-                <SubMenu key="sub3" title="Submenu">
-                  <Menu.Item key="7">Option 7</Menu.Item>
-                  <Menu.Item key="8">Option 8</Menu.Item>
-                </SubMenu>
-              </SubMenu>
-              <SubMenu key="sub4" icon={<SettingOutlined />} title="Navigation Three">
-                <Menu.Item key="9">Option 9</Menu.Item>
-                <Menu.Item key="10">Option 10</Menu.Item>
-                <Menu.Item key="11">Option 11</Menu.Item>
-                <Menu.Item key="12">Option 12</Menu.Item>
-              </SubMenu>*/}
               </Menu>
             </Sider>
 
@@ -111,14 +93,12 @@ const App: React.FunctionComponent = () => {
 
                 <Content className="main-content">
                   <Switch>
-                    <Route path="/upgrade" component={() => {
-                      window.open( 'https://www.radware.com/products/appwall/', '_blank');
-                      return null;
-                    }}/>
+                    <Route path="/upgrade" component={Upgrade}/>
                     <Route path="/real-time" component={RealTime} />
                     <Route path="/audit" component={Audit} />
-                    <Route path="/configuration" component={Configuration} />
-                    <Route path="/migration" component={Migration} />
+                    <Route path="/protections" component={Protections} />
+                    <Route path="/rules" component={Rules} />
+                    <Route path="/settings" component={Settings} />
                     <Route path="/" component={Dashboard} />
                   </Switch>
                 </Content>
