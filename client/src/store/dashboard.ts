@@ -65,6 +65,7 @@ export const dashboard = createModel<RootModel>({
       };
     },
     setTimeRange(state, payload) {
+
       return {
         ...state,
         autoRefresh: payload.autoRefresh ? payload.autoRefresh : true,
