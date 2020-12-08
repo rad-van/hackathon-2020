@@ -1,0 +1,12 @@
+RAD-VAN dregis
+This is a private docker registry and a caching proxy to the Nexus servers in Tel Aviv.
+
+If you see this page, it is alive!
+
+If your docker daemons have never used this registry/proxy before, get the self-signed certificate here and follow this link to make your docker daemons to accept the certificate.
+
+If you are running docker on Linux machines (Ubuntu 18.04 or later), run these commands:
+
+sudo mkdir -p /etc/docker/certs.d/dregis
+wget --no-check-certificate -O- https://dregis.strangeloop.net/ca.crt | \
+  sudo tee /etc/docker/certs.d/dregis/ca.crt
