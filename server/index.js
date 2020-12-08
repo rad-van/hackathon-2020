@@ -5,6 +5,7 @@ const cors = require('cors');
 const esResponseParser = require("es-response-parser");
 
 const {INF, ERR, DEB, logger} = require('./log.js');
+const path = require("path");
 
 INF(`Node version: ${process.version}`);
 
@@ -249,6 +250,8 @@ const parseData = (response, labels, aggregation, type) => {
 
     return response;
 };
+
+app.use("/", express.static(path.resolve(__dirname, 'public')));
 
 const sendWsMessage = (eventName, body) => {
     io.emit(eventName, body);
