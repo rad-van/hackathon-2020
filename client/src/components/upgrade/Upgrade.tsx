@@ -12,7 +12,7 @@ const Upgrade: React.FunctionComponent = () => {
     return (
         <div>
         <div style={{marginBottom: '30px'}}><a href='https://www.radware.com' rel='noreferrer' target='_blank'>Upgrade to Radware Premium Ruleset</a></div>
-        <div><a href='https://www.radware.com/products/appwall' rel='noreferrer' target='_blank'>Upgrade to Professional Radware Products</a></div>
+        <div><a href='https://www.radware.com/products/cloud-waf-service/' rel='noreferrer' target='_blank'>Upgrade to Professional Radware Products</a></div>
         </div>
     );
 };
