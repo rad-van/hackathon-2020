@@ -49,7 +49,7 @@ services:
   be:
     build:
       context: ./server
-    image: 'dregis.strangeloop.net/hackathon-2020/server:latest'
+    image: 'dregis.strangeloop.net/hackathon-2020/server:1.0.0'
     container_name: be
     networks:
       - hackathon
