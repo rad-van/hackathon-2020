@@ -1,8 +1,10 @@
-import { TrademarkOutlined, DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined } from '@ant-design/icons';
+import { TrademarkOutlined, DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined, BarsOutlined, ControlOutlined, FileProtectOutlined } from '@ant-design/icons';
 import { Layout, Menu, PageHeader } from 'antd';
 import 'App.less';
 import Audit from 'components/audit/Audit';
-import Configuration from 'components/configuration/Configuration';
+import Protections from 'components/configuration/Protections';
+import Rules from 'components/configuration/Rules';
+import Settings from 'components/configuration/Settings';
 import Migration from 'components/migration/Migration';
 import Upgrade from 'components/upgrade/Upgrade';
 import Dashboard from 'components/dashboard/Dashboard';
@@ -60,9 +62,17 @@ const App: React.FunctionComponent = () => {
                 <Menu.Item key={`/audit`} icon={<FundViewOutlined />}>
                   <Link to={`/audit`}>Audit</Link>
                 </Menu.Item>
-                <Menu.Item key={`/configuration`} icon={<SettingOutlined />}>
-                  <Link to={`/configuration`}>Configuration</Link>
-                </Menu.Item>
+                <Menu.SubMenu key="config" icon={<SettingOutlined />} title="Configuration">
+                  <Menu.Item key={`/protections`} icon={<FileProtectOutlined />}>
+                    <Link to={`/protections`}>Protected Web Apps</Link>
+                  </Menu.Item>
+                  <Menu.Item key={`/rules`} icon={<BarsOutlined />}>
+                    <Link to={`/rules`}>Rules</Link>
+                  </Menu.Item>
+                  <Menu.Item key={`/settings`} icon={<ControlOutlined />}>
+                    <Link to={`/settings`}>Settings</Link>
+                  </Menu.Item>
+                </Menu.SubMenu>
                 <Menu.Item key={`/migration`} icon={<TrademarkOutlined />}>
                   <Link to={`/migration`}>Migration</Link>
                 </Menu.Item>
@@ -90,7 +100,9 @@ const App: React.FunctionComponent = () => {
                     <Route path="/upgrade" component={Upgrade}/>
                     <Route path="/real-time" component={RealTime} />
                     <Route path="/audit" component={Audit} />
-                    <Route path="/configuration" component={Configuration} />
+                    <Route path="/protections" component={Protections} />
+                    <Route path="/rules" component={Rules} />
+                    <Route path="/settings" component={Settings} />
                     <Route path="/migration" component={Migration} />
                     <Route path="/" component={Dashboard} />
                   </Switch>
