@@ -35,13 +35,15 @@ services:
 
   # The modsec/nginx firewall
   waf:
-    image: 'dregis.strangeloop.net/hackathon-2020/wafmod:3.0.4'
+    image: 'dregis.strangeloop.net/hackathon-2020/wafmod:3.0.6'
     container_name: waf
     networks:
       - hackathon
     ports:
       - "8443:443"
       - "8000:80"
+    depends_on:
+      - hackme
 
   # Our backend server
   be:
@@ -60,4 +62,10 @@ services:
       DEBUG_LOGGING_LEVEL: '${ALAMOD_LOG:-info}'
     depends_on:
       - es
-
+  hackme:
+    image: 'dregis.strangeloop.net/hackathon-2020/hackme:1.0.1'
+    container_name: hackme
+    networks:
+      - hackathon
+    ports:
+      - "8081:80"
