@@ -21,7 +21,7 @@ const Settings: React.FunctionComponent = () => {
 
   return (
     <Form {...layout} >
-      <Form.Item label="Number of Threads" >
+      <Form.Item label="Number of Workers" >
         <Select defaultValue="auto">
           <Option value="auto">Auto</Option>
           <Option value="1">1</Option>
@@ -30,7 +30,7 @@ const Settings: React.FunctionComponent = () => {
           <Option value="8">8</Option>
         </Select>
       </Form.Item>
-      <Form.Item label="Connections Per Thread">
+      <Form.Item label="Connections Per Worker">
         <InputNumber min={1024} max={8192} step={1024} defaultValue={4096} />
       </Form.Item>
       <Form.Item label="Log level">
