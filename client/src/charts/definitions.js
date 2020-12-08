@@ -337,7 +337,10 @@ export const auditLogDefinition = {
     request: {
         aggregation: false,
         query : {
-
+            "size": 5000,
+            sort: {
+                "time_stamp" : {"order" : "desc"}
+            }
         }
     }
 

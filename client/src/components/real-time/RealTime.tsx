@@ -23,7 +23,7 @@ const columns: ColumnsType<AuditDocument> = [
   {
     title: 'Source',
     dataIndex: 'client_ip',
-    render: (_, doc) => `${doc.client_ip}:${doc.client_port}`,
+    render: (client_ip, doc) => (doc.request.headers['55555'] ? doc.request.headers['55555'] : client_ip),
     filtered: true,
   },
   {
