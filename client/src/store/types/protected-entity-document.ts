@@ -3,5 +3,6 @@ export interface ProtectedEntityDocument {
     ip: string,
     port: number,
     protocol: string,
+    enabled: boolean,
 }
 
