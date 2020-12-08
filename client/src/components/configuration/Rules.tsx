@@ -19,10 +19,6 @@ const Rules: React.FunctionComponent = () => {
       dataIndex: 'group',
     },
     {
-      title: 'Rule Group',
-      dataIndex: 'group',
-    },
-    {
       title: 'Enabled',
       dataIndex: 'enabled',
       render: (e: any, record: any) => (< Switch defaultChecked={e} />)
@@ -232,12 +228,11 @@ const Rules: React.FunctionComponent = () => {
 
   return (
       <div>
-        <div>List of OWASP Top 10 rules to enable/disable</div>
         <Row>
-          <Col span={6} offset={18}>
+          <Col span={6} offset={18} style={{ marginBottom: '20px' }}>
             <Space>
               <Button type="primary">Add New Rule</Button>
-              <Button type="primary">Purchase Radware Rule Set</Button>
+              <Button type="primary">Purchase Radware Advanced Rule Set</Button>
             </Space>
           </Col>
         </Row>

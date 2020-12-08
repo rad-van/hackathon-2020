@@ -5,6 +5,9 @@ import Audit from 'components/audit/Audit';
 import Protections from 'components/configuration/Protections';
 import Rules from 'components/configuration/Rules';
 import Settings from 'components/configuration/Settings';
+import InstallDeploy from 'components/installation/Deploy';
+import InstallRulesets from 'components/installation/Rulesets';
+import InstallWebapp from 'components/installation/Webapp';
 import Upgrade from 'components/upgrade/Upgrade';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
@@ -39,7 +42,7 @@ const App: React.FunctionComponent = () => {
           <Layout style={{ minHeight: '100vh' }}>
             <Sider className="menu-sider" width={300}>
               <div className="firewaf-title">
-                <img src={logo} style={{height:'70px'}} alt={'Radware'}/>
+                <img src={logo} style={{ height: '70px' }} alt={'Radware'} />
                 <div>
                   <h3>WAF Lite</h3>
                 </div>
@@ -93,12 +96,15 @@ const App: React.FunctionComponent = () => {
 
                 <Content className="main-content">
                   <Switch>
-                    <Route path="/upgrade" component={Upgrade}/>
+                    <Route path="/upgrade" component={Upgrade} />
                     <Route path="/real-time" component={RealTime} />
                     <Route path="/audit" component={Audit} />
                     <Route path="/protections" component={Protections} />
                     <Route path="/rules" component={Rules} />
                     <Route path="/settings" component={Settings} />
+                    <Route path="/install/webapp" component={InstallWebapp} />
+                    <Route path="/install/rulesets" component={InstallRulesets} />
+                    <Route path="/install/deploy" component={InstallDeploy} />
                     <Route path="/" component={Dashboard} />
                   </Switch>
                 </Content>
