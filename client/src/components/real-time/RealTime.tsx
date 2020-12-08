@@ -35,7 +35,7 @@ const columns: ColumnsType<AuditDocument> = [
     render: url => (<Tooltip title={url} placement="topLeft">{url}</Tooltip>),
   },
   {
-    title: 'Response Code',
+    title: 'Status Code',
     dataIndex: ['response', 'http_code'],
   },
   {
