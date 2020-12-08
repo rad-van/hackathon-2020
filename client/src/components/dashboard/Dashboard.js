@@ -10,6 +10,8 @@ import { fetchData } from '../../services/service';
 import { mapRuleId } from '../../utils/owasp-mapping';
 
 const { RangePicker } = DatePicker;
+
+let interval = 0;
 const mapState = (state) => ({
   charts: state.dashboard.charts,
   timeRange: state.dashboard.timeRange,
@@ -51,7 +53,8 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     if (props.autoRefresh) {
-      const interval = setInterval(() => {
+      console.log(props.autoRefresh);
+      interval = setInterval(() => {
         let start = moment(Date.now() - 900000);
         let end = null;
         let values = [start, end];
@@ -64,6 +67,7 @@ const Dashboard = (props) => {
   function onOk(value) {
     if (value.length === 2) {
       if (value[0] !== null && value[1] !== null) {
+        clearInterval(interval);
         props.setTimeRange({value : value, autoRefresh: false});
       }
     }
