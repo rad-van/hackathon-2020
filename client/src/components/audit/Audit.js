@@ -42,7 +42,7 @@ const Audit = (props) => {
         render: (_, doc) => <Tooltip title={doc._source.request.uri} placement="topLeft">{doc._source.request.uri}</Tooltip>
     },
     {
-        title: 'Response Code',
+        title: 'Status Code',
         dataIndex: ['response', 'http_code'],
         render: (_, doc) => doc._source.response.http_code,
         filtered: true,
