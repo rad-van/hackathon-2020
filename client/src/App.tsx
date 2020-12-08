@@ -1,11 +1,10 @@
-import { TrademarkOutlined, DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined, BarsOutlined, ControlOutlined, FileProtectOutlined } from '@ant-design/icons';
+import { DollarCircleOutlined, DashboardOutlined, FieldTimeOutlined, FundViewOutlined, SettingOutlined, BarsOutlined, ControlOutlined, FileProtectOutlined } from '@ant-design/icons';
 import { Layout, Menu, PageHeader } from 'antd';
 import 'App.less';
 import Audit from 'components/audit/Audit';
 import Protections from 'components/configuration/Protections';
 import Rules from 'components/configuration/Rules';
 import Settings from 'components/configuration/Settings';
-import Migration from 'components/migration/Migration';
 import Upgrade from 'components/upgrade/Upgrade';
 import Dashboard from 'components/dashboard/Dashboard';
 import RealTime from 'components/real-time/RealTime';
@@ -73,9 +72,6 @@ const App: React.FunctionComponent = () => {
                     <Link to={`/settings`}>Settings</Link>
                   </Menu.Item>
                 </Menu.SubMenu>
-                <Menu.Item key={`/migration`} icon={<TrademarkOutlined />}>
-                  <Link to={`/migration`}>Migration</Link>
-                </Menu.Item>
                 <Menu.Item key={`/upgrade`} icon={<DollarCircleOutlined />}>
                   <Link to={`/upgrade`}>Upgrade</Link>
                 </Menu.Item>
@@ -103,7 +99,6 @@ const App: React.FunctionComponent = () => {
                     <Route path="/protections" component={Protections} />
                     <Route path="/rules" component={Rules} />
                     <Route path="/settings" component={Settings} />
-                    <Route path="/migration" component={Migration} />
                     <Route path="/" component={Dashboard} />
                   </Switch>
                 </Content>
