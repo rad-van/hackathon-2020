@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TAG=${1:-0.1}
+TAG=${1:-latest}
 
 REPO="dregis.strangeloop.net/hackathon-2020"
 
