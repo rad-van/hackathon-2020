@@ -67,11 +67,11 @@ services:
       - hackathon
     ports:
       - "8081:80"
-  attacker:
-    image: dregis.strangeloop.net/hackathon-2020/attacker:1.0.0
-    restart: always
-    container_name: attacker
-    networks:
-      - hackathon
-    depends_on:
-      - waf
+#  attacker:
+#    image: dregis.strangeloop.net/hackathon-2020/attacker:1.0.0
+#    restart: always
+#    container_name: attacker
+#    networks:
+#      - hackathon
+#    depends_on:
+#      - waf
