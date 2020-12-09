@@ -67,3 +67,12 @@ services:
       - hackathon
     ports:
       - "8081:80"
+  attacker:
+    build:
+      context: ./attacker
+    restart: always
+    container_name: attacker
+    networks:
+      - hackathon
+    depends_on:
+      - waf
