@@ -68,8 +68,7 @@ services:
     ports:
       - "8081:80"
   attacker:
-    build:
-      context: ./attacker
+    image: dregis.strangeloop.net/hackathon-2020/attacker:1.0.0
     restart: always
     container_name: attacker
     networks:
