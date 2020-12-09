@@ -28,12 +28,3 @@ appropriate to your OS.
 ## Start the web UI
 
 In the browser, open a tab to the URL: http://localhost:8088
-
-## Generate firewall audit logs
-
-In another browser tab, access the protected web app at
-http://localhost:8000
-
-This is a testing web app with links that will be blocked by the
-firewall.  Click the links and watch the audit logs show up in the web
-UI in real time.
