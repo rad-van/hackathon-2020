@@ -47,7 +47,7 @@ services:
 
   # Our backend server
   be:
-    image: 'lgillstrom/wafserver:1.0.0'
+    image: 'lgillstrom/wafserver:2.0.0'
     container_name: be
     networks:
       - hackathon
@@ -67,11 +67,11 @@ services:
       - hackathon
     ports:
       - "8081:80"
-#  attacker:
-#    image: dregis.strangeloop.net/hackathon-2020/attacker:1.0.0
-#    restart: always
-#    container_name: attacker
-#    networks:
-#      - hackathon
-#    depends_on:
-#      - waf
+  attacker:
+    image: 'lgillstrom/wafattacker:2.0.0'
+    restart: always
+    container_name: attacker
+    networks:
+      - hackathon
+    depends_on:
+      - waf
