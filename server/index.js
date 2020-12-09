@@ -72,7 +72,10 @@ app.post("/ingest", async (req, res, next) => {
     buildTransactions(transaction, transactions);
   }
   const body = transactions.flatMap(doc => [{index: {_index: 'audit-log'}}, doc]);
-  await esc.bulk({refresh: true, body});
+  console.log(body);
+  await esc.bulk({refresh: true, body}).catch((err) => {
+      res.sendStatus(403);
+  });
   res.sendStatus(200);
 });
 
@@ -81,9 +84,10 @@ app.post("/history", async (req, res, next) => {
   const {body} = await esc.search({
     index: 'audit-log',
     body: req.body.query
+  }).catch((err) => {
+      res.sendStatus(403);
   });
   DEB("total hits:", body.hits.total.value);
-  INF(body);
   const response = parseData(body,req.body.labels, req.body.aggregation, req.body.type, req.body.colors);
   res.json(response);
   next();
@@ -195,7 +199,6 @@ const parseData = (response, labels, aggregation, type) => {
     if(aggregation)
     {
         let colors = [];
-        console.log(response);
         const parsedResponse = esResponseParser.parse(response);
         let chartData = {
             labels: [],
