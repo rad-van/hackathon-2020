@@ -255,6 +255,9 @@ const parseData = (response, labels, aggregation, type) => {
 };
 
 app.use("/", express.static(path.resolve(__dirname, 'public')));
+app.get('*', (req,res) => {
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
 const sendWsMessage = (eventName, body) => {
     io.emit(eventName, body);
